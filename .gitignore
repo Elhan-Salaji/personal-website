@@ -1,0 +1,46 @@
+# Abhängigkeiten
+/node_modules
+/.pnp
+.pnp.*
+
+# Tests
+/coverage
+
+# Next.js Build
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# Umgebungsvariablen: echte Werte gehören nie ins Repo.
+# Nur die Vorlage .env.example wird eingecheckt.
+.env
+.env.*
+!.env.example
+
+# Vercel CLI
+.vercel
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Schlüssel und Zertifikate
+*.pem
+*.key
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+
+# IDEs (IntelliJ, VS Code)
+.idea/
+*.iml
+.vscode/
+
+# Von "next dev" lokal erzeugte Hinweisdateien für Coding-Assistenten
+AGENTS.md
+CLAUDE.md
