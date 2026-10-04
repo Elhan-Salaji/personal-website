@@ -7,6 +7,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    // Fremde Zeitzone, damit Tests auffallen, die versehentlich die Serverzeit nutzen
+    env: { TZ: "America/New_York" },
     include: ["src/**/*.test.ts"],
   },
 });
