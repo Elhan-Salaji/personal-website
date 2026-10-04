@@ -1,0 +1,12 @@
+.section {
+  padding-block: 3rem;
+  border-top: 1px solid var(--border);
+  /* Platz für den fixierten Header beim Springen zum Anker */
+  scroll-margin-top: var(--header-height);
+}
+
+@media (min-width: 48rem) {
+  .section {
+    padding-block: 4.5rem;
+  }
+}

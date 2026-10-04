@@ -1,0 +1,19 @@
+.list {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+}
+
+.list li {
+  display: flex;
+  flex-direction: column;
+}
+
+.list a {
+  overflow-wrap: anywhere;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
