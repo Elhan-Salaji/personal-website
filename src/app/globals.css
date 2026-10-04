@@ -195,3 +195,40 @@ img {
   background: var(--bg);
   font-size: 0.875rem;
 }
+
+/* Farben für Fehlermeldungen und Kalenderquellen */
+:root {
+  --error: #b42318;
+  --cal-private-bg: #fff1e6;
+  --cal-private-border: #c2410c;
+  --cal-uni-bg: #e3f4f1;
+  --cal-uni-border: #0f766e;
+  --warning-bg: #fff8db;
+  --warning-border: #a16207;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --error: #ff8a80;
+    --cal-private-bg: #3a2416;
+    --cal-private-border: #fb923c;
+    --cal-uni-bg: #10302c;
+    --cal-uni-border: #2dd4bf;
+    --warning-bg: #332a0d;
+    --warning-border: #facc15;
+  }
+}
+
+/* Quellen unterscheiden sich nicht nur über die Farbe, sondern auch über die
+   Rahmenart: Privat durchgezogen, Hochschule gestrichelt. */
+[data-source="private"] {
+  --event-bg: var(--cal-private-bg);
+  --event-border: var(--cal-private-border);
+  --event-border-style: solid;
+}
+
+[data-source="uni"] {
+  --event-bg: var(--cal-uni-bg);
+  --event-border: var(--cal-uni-border);
+  --event-border-style: dashed;
+}
