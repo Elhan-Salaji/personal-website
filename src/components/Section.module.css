@@ -3,10 +3,31 @@
   border-top: 1px solid var(--border);
 }
 
+.title {
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+}
+
+/* Kein Abstand nach dem letzten Absatz, sonst wächst der Abschnitt nach unten */
+.content > :last-child {
+  margin-bottom: 0;
+}
+
 @media (min-width: 48rem) {
   .section {
     padding-block: 4.5rem;
     /* Platz für den fixierten Header beim Springen zum Anker */
     scroll-margin-top: var(--header-height);
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: var(--label-width) minmax(0, 1fr);
+    column-gap: var(--column-gap);
+    align-items: start;
+  }
+
+  .title {
+    margin-bottom: 0;
   }
 }
