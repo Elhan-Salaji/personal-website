@@ -2,7 +2,7 @@ import Link from "next/link";
 import { DateTime } from "luxon";
 import { logout } from "@/app/kalender/actions";
 import { buildWeekDays, visibleHourRange, type CalendarDay } from "@/lib/calendar/layout";
-import type { CalendarWeekData } from "@/lib/calendar/service";
+import type { CalendarData } from "@/lib/calendar/service";
 import { CALENDAR_ZONE } from "@/lib/calendar/time";
 import { formatWeekParam } from "@/lib/calendar/week";
 import {
@@ -18,7 +18,7 @@ import styles from "./CalendarWeek.module.css";
 
 interface CalendarWeekProps {
   weekStart: DateTime;
-  data: CalendarWeekData;
+  data: CalendarData;
 }
 
 export function CalendarWeek({ weekStart, data }: CalendarWeekProps) {

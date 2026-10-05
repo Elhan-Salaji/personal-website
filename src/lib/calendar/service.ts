@@ -1,11 +1,9 @@
 import "server-only";
-import type { DateTime } from "luxon";
 import { getCalendarSources, getDetailLevel } from "./config";
 import { expandCalendar } from "./expand";
 import { TtlCache } from "./ttl-cache";
 import { describeCalendar } from "./labels";
-import type { CalendarDetailLevel, CalendarEvent, CalendarInfo, SourceProblem } from "./types";
-import { weekRange } from "./week";
+import type { CalendarDetailLevel, CalendarEvent, CalendarInfo, SourceProblem, TimeRange } from "./types";
 
 /** ICS-Dateien bleiben 12 Minuten im Speicher der Instanz. */
 const ICS_CACHE_TTL_MS = 12 * 60 * 1000;
@@ -14,7 +12,7 @@ const MAX_ICS_BYTES = 10 * 1024 * 1024;
 
 const icsCache = new TtlCache<string>(ICS_CACHE_TTL_MS);
 
-export interface CalendarWeekData {
+export interface CalendarData {
   events: CalendarEvent[];
   /** Alle erfolgreich geladenen Kalender in der Reihenfolge der Umgebungsvariablen */
   calendars: CalendarInfo[];
@@ -43,14 +41,13 @@ async function downloadIcs(url: string): Promise<string> {
 }
 
 /**
- * Lädt alle Kalender aller Quellen parallel und führt die Termine der Woche
- * zusammen. Fällt ein Kalender aus, liefert die Funktion die übrigen Termine
+ * Lädt alle Kalender aller Quellen parallel und führt die Termine des
+ * Zeitraums zusammen, also einer Woche oder eines Monats. Fällt ein Kalender aus, liefert die Funktion die übrigen Termine
  * und meldet pro Quelle, wie viele Kalender fehlen. Die Links selbst landen
  * nie im Log, nur Quelle und Position.
  */
-export async function loadCalendarWeek(weekStart: DateTime): Promise<CalendarWeekData> {
+export async function loadCalendar(range: TimeRange): Promise<CalendarData> {
   const detail = getDetailLevel();
-  const range = weekRange(weekStart);
 
   const results = await Promise.all(
     getCalendarSources().map(async (source) => {

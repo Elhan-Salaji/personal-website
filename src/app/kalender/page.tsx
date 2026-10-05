@@ -3,8 +3,8 @@ import { CalendarWeek } from "@/components/calendar/CalendarWeek";
 import { LoginForm } from "@/components/calendar/LoginForm";
 import { getAuthConfig } from "@/lib/auth/config";
 import { hasValidSession } from "@/lib/auth/current-session";
-import { loadCalendarWeek } from "@/lib/calendar/service";
-import { resolveWeekStart } from "@/lib/calendar/week";
+import { loadCalendar } from "@/lib/calendar/service";
+import { resolveWeekStart, weekRange } from "@/lib/calendar/week";
 import styles from "./page.module.css";
 
 // Jede Anfrage wird einzeln auf dem Server gerendert, nie vorab oder aus einem
@@ -33,7 +33,7 @@ export default async function CalendarPage({ searchParams }: PageProps<"/kalende
 
   const { woche } = await searchParams;
   const weekStart = resolveWeekStart(typeof woche === "string" ? woche : undefined);
-  const data = await loadCalendarWeek(weekStart);
+  const data = await loadCalendar(weekRange(weekStart));
 
   return (
     <div className={`container ${styles.page}`}>
