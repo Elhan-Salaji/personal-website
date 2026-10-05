@@ -1,32 +1,28 @@
 import Image from "next/image";
 import { profile } from "@/content/profile";
-import { sections } from "./sections";
 import styles from "./Hero.module.css";
 
 export function Hero() {
+  const { photo, tagline } = profile;
+
   return (
     <section aria-labelledby="hero-titel" className={styles.hero}>
       <div className={`container ${styles.inner}`}>
-        <Image
-          src={profile.photo.src}
-          alt={profile.photo.alt}
-          width={profile.photo.width}
-          height={profile.photo.height}
-          className={styles.photo}
-          priority
-        />
-        <div>
+        <div className={styles.heading}>
           <h1 id="hero-titel">{profile.name}</h1>
-          <p className={styles.tagline}>{profile.tagline}</p>
-          <div className={styles.actions}>
-            <a href={`#${sections.projects.id}`} className="button">
-              Projekte
-            </a>
-            <a href={`#${sections.contact.id}`} className="button button--secondary">
-              Kontakt
-            </a>
-          </div>
+          <p className={styles.role}>{profile.role}</p>
         </div>
+        {photo && (
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            width={photo.width}
+            height={photo.height}
+            className={styles.photo}
+            priority
+          />
+        )}
+        {tagline && <p className={styles.tagline}>{tagline}</p>}
       </div>
     </section>
   );

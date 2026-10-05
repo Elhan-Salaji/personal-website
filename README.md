@@ -2,7 +2,7 @@
 
 Ein One-Pager mit Projekten, Lebenslauf und Kontaktlinks, dazu Impressum, Datenschutz und ein passwortgeschützter Kalender für Freunde. Die Seite läuft auf Vercel und deployt automatisch aus diesem Repository.
 
-**Tech-Stack:** Next.js 16 (App Router), TypeScript, CSS Modules, ical.js, Luxon, Vitest
+**Tech-Stack:** Next.js 16 (App Router), TypeScript, CSS Modules, IBM Plex über `next/font`, ical.js, Luxon, Vitest
 
 ## Lokal starten
 
@@ -57,28 +57,40 @@ Fehlt `CALENDAR_PASSWORD` oder ist `SESSION_SECRET` kürzer als 32 Zeichen, blei
 
 Wenn du `CALENDAR_PASSWORD` änderst, werden alle bestehenden Sitzungen ungültig. Deine Freunde müssen sich dann mit dem neuen Passwort anmelden.
 
-## Platzhalter austauschen
+## Inhalte und offene Stellen
 
-Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Jeder Platzhalter beginnt mit `[PLATZHALTER:`, so findest du alle offenen Stellen:
+Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Fehlende Angaben stehen dort als `TODO`-Kommentar, die Seite blendet sie aus. So findest du alle offenen Stellen:
 
 ```bash
-grep -rn "PLATZHALTER" src public
+grep -rn "TODO" src/content
 ```
+
+Solange `workInProgress` in `profile.ts` auf `true` steht, zeigt die Kopfzeile neben deinem Namen ein rotes "WIP". Ist die Seite fertig, setzt du den Wert auf `false`.
 
 | Datei                       | Inhalt                                                    |
 | --------------------------- | --------------------------------------------------------- |
-| `src/content/profile.ts`    | Name, Kurzzeile, Foto, Text "Über mich", Seitentitel      |
-| `src/content/projects.ts`   | Projektkarten mit Technologien und GitHub-Link            |
+| `src/content/profile.ts`    | Name, Studium, Kurzzeile, Foto, Über mich, Seitentitel    |
+| `src/content/projects.ts`   | Projekte mit Technologien und GitHub-Link                 |
 | `src/content/cv.ts`         | Lebenslauf-Einträge und Pfad zur PDF                      |
 | `src/content/skills.ts`     | Skill-Gruppen                                             |
 | `src/content/contact.ts`    | E-Mail, LinkedIn, GitHub                                  |
 | `src/content/legal.ts`      | Impressum und Datenschutzerklärung                        |
 
-Dein Foto legst du unter `public/images/` ab und trägst den Pfad in `profile.ts` ein. Danach kannst du `profilbild-platzhalter.svg` löschen.
+Solange `photo` in `profile.ts` auf `null` steht, zeigt der Hero kein Foto. Willst du eins zeigen, legst du es unter `public/images/` ab und trägst Pfad, Größe und Beschreibung in `profile.ts` ein.
 
 Der PDF-Download des Lebenslaufs ist ausgeblendet, solange `cvPdfPath` in `cv.ts` auf `null` steht. Willst du ihn anbieten, legst du eine PDF unter `public/dokumente/` ab und trägst den Pfad dort ein. Die PDF ist dann für alle abrufbar, sie darf also weder Wohnadresse noch Telefonnummer enthalten.
 
-Für die Texte gelten diese Regeln: Deutsch, keine Gedankenstriche, keine Adresse, Telefonnummer oder Geburtsdatum auf der öffentlichen Seite. Die einzige Ausnahme ist das Impressum, falls du eins brauchst.
+Impressum und Datenschutzerklärung in `legal.ts` beschreiben, was die Seite technisch tut: Hosting bei Vercel, das Cookie der Kalenderseite und die Fehlversuche pro IP-Adresse. Änderst du daran etwas oder bindest einen neuen Dienst ein, passt du die Texte mit an.
+
+Für die Texte gelten diese Regeln: Deutsch, sachlich, keine Gedankenstriche, keine Ausrufezeichen, keine Emojis. Adresse, Telefonnummer und Geburtsdatum gehören nicht auf die öffentliche Seite, die einzige Ausnahme ist das Impressum.
+
+## Gestaltung
+
+Farben, Abstände und Schriften stehen als Variablen oben in `src/app/globals.css`. Die Seite nutzt Zinc-Töne und Petrol als einzigen Akzent, Linien statt Schatten und Radien von 2 bis 3 px. Rot taucht nur im WIP-Hinweis und in Fehlermeldungen auf. Text erreicht hell wie dunkel mindestens 6.6:1 Kontrast. Wenn du eine Farbe änderst, prüf den Kontrast neu.
+
+Ab 48rem Breite (768 px) teilt sich die Seite in zwei Spalten. Links stehen Name, Abschnittstitel und Copyright (`--label-width`), rechts Navigation und Inhalt. Fließtext endet nach `--measure`, das sind rund 70 Zeichen. Innerhalb eines Abschnitts haben Zeiträume und Bezeichnungen eine eigene Spalte (`--meta-width`), so fluchten Lebenslauf, Skills und Kontakt untereinander.
+
+Für Text und Überschriften nutzt die Seite IBM Plex Sans, für Zeiträume und Technologien IBM Plex Mono. Die Begründung steht in ADR 0004. Bewegung gibt es nur beim Springen zu einem Abschnitt und als kurzen Farbwechsel beim Überfahren von Links, beides fällt bei reduzierter Bewegung weg.
 
 ## Der Kalender
 
@@ -105,7 +117,7 @@ src/
   content/            Alle Texte und Daten über dich
   lib/auth/           Passwortvergleich, Sitzungs-Token, Rate Limiting
   lib/calendar/       ICS-Auswertung, Wochenlogik, Layout, Cache
-public/               Foto und Lebenslauf-PDF
+public/               Foto und Lebenslauf-PDF, sobald vorhanden
 docs/adr/             Architekturentscheidungen
 ```
 

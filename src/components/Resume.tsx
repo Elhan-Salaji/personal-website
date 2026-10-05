@@ -16,14 +16,16 @@ export function Resume() {
       <div className={styles.groups}>
         {groups.map(({ category, entries }) => (
           <div key={category}>
-            <h3>{category}</h3>
-            <ol className={styles.timeline}>
+            <h3 className={styles.groupTitle}>{category}</h3>
+            <ol className={styles.entries}>
               {entries.map((entry) => (
                 <li key={`${entry.period}-${entry.title}`} className={styles.entry}>
                   <p className={styles.period}>{entry.period}</p>
-                  <p className={styles.title}>{entry.title}</p>
-                  <p className={styles.organization}>{entry.organization}</p>
-                  {entry.description && <p className={styles.description}>{entry.description}</p>}
+                  <div>
+                    <p className={styles.title}>{entry.title}</p>
+                    <p className={styles.organization}>{entry.organization}</p>
+                    {entry.description && <p className={styles.description}>{entry.description}</p>}
+                  </div>
                 </li>
               ))}
             </ol>
@@ -31,7 +33,7 @@ export function Resume() {
         ))}
       </div>
       {cvPdfPath && (
-        <a href={cvPdfPath} className="button" download>
+        <a href={cvPdfPath} className={`button button--secondary ${styles.download}`} download>
           Lebenslauf als PDF herunterladen
         </a>
       )}

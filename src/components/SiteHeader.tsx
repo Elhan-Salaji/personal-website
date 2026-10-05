@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { profile } from "@/content/profile";
+import { profile, workInProgress } from "@/content/profile";
 import { navigationOrder } from "./sections";
 import styles from "./SiteHeader.module.css";
 
@@ -11,9 +11,17 @@ export function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.brand}>
-          {profile.name}
-        </Link>
+        <div className={styles.brandRow}>
+          <Link href="/" className={styles.brand}>
+            {profile.name}
+          </Link>
+          {workInProgress && (
+            <span className={styles.wip} title="Work in Progress: Die Seite ist noch in Arbeit">
+              <span aria-hidden="true">WIP</span>
+              <span className="visually-hidden">Die Seite ist noch in Arbeit</span>
+            </span>
+          )}
+        </div>
         <nav aria-label="Hauptnavigation">
           <ul className={styles.navList}>
             {navigationOrder.map((section) => (

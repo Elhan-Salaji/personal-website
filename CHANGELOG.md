@@ -14,11 +14,25 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - Mehrere Kalender pro Quelle, kommagetrennt in einer Umgebungsvariable, mit Hinweis bei Teilausfall
 - Private Kalender erscheinen mit Namen und Farbe aus iCloud
 - Echte Inhalte aus dem Lebenslauf, Zeitleiste mit Gruppe "Engagement und Auszeichnungen"
+- ADR 0004 zur Schrift
+- Roter Hinweis "WIP" in der Kopfzeile, abschaltbar über `workInProgress` in `profile.ts`
 
 ### Changed
 
 - PDF-Download des Lebenslaufs ist optional und vorerst ausgeblendet
 - Impressum und Datenschutz sind für Suchmaschinen auf `noindex` gesetzt
+- Neues Erscheinungsbild: Zinc mit Petrol als einzigem Akzent, IBM Plex Sans und Mono über `next/font`, Linien statt Karten und Schatten
+- Zweispaltiges Raster ab Desktop, Abschnittstitel links und Inhalt rechts, auch auf Impressum und Datenschutz
+- Projekte als Liste, Lebenslauf mit eigener Spalte für Zeiträume, Skills und Kontakt als Liste aus Bezeichnung und Wert
+- Hero zeigt Name und Studium, Kurzzeile und Foto bleiben ausgeblendet, bis sie in `profile.ts` stehen
+- Kopfzeile läuft nur ab Desktop beim Scrollen mit
+- Fehlende Inhalte sind als `TODO` in `src/content/` markiert statt als sichtbarer Platzhalter
+- Impressum und Datenschutzerklärung ausformuliert, passend zu Hosting, Kalender-Cookie und Rate Limiting
+- Kalender-Link in der Fußzeile sieht aus wie Impressum und Datenschutz
+
+### Removed
+
+- Platzhalter-Foto im Hero
 
 ### Fixed
 

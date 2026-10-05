@@ -18,7 +18,7 @@ export function SiteFooter() {
               <Link href="/datenschutz">Datenschutz</Link>
             </li>
             <li>
-              <Link href="/kalender" className={styles.subtle} prefetch={false}>
+              <Link href="/kalender" prefetch={false}>
                 Kalender
               </Link>
             </li>

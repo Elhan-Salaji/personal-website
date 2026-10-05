@@ -1,19 +1,5 @@
-.list {
-  display: grid;
-  gap: 1rem;
-  list-style: none;
-}
-
-.list li {
-  display: flex;
-  flex-direction: column;
-}
-
-.list a {
-  overflow-wrap: anywhere;
-}
-
-.label {
-  font-size: 0.875rem;
-  color: var(--text-muted);
+/* address setzt sonst Kursivschrift */
+.address {
+  margin-top: 1.5rem;
+  font-style: normal;
 }

@@ -7,17 +7,17 @@ export const siteMetadata = {
     "Elhan Salaji studiert Medieninformatik an der Hochschule der Medien Stuttgart. Projekte, Lebenslauf und Kontakt.",
 };
 
+/** true zeigt in der Kopfzeile neben dem Namen den roten Hinweis "WIP". */
+export const workInProgress = true;
+
 export const profile: Profile = {
   name: "Elhan Salaji",
-  tagline:
-    "Ich studiere Medieninformatik an der Hochschule der Medien Stuttgart. Mein Schwerpunkt: Backend, Server-Betrieb und deren Absicherung.",
-  photo: {
-    // Eigenes Foto in public/images/ ablegen und hier den Pfad anpassen.
-    src: "/images/profilbild-platzhalter.svg",
-    alt: "[PLATZHALTER: Beschreibung des Fotos, z. B. Porträt von Elhan Salaji]",
-    width: 320,
-    height: 320,
-  },
+  role: "Medieninformatik (B.Sc.) an der Hochschule der Medien Stuttgart",
+  // TODO: Kurzzeile für den Hero, ein bis zwei Sätze zu deinem Schwerpunkt.
+  tagline: null,
+  // TODO: Foto unter public/images/ ablegen und hier eintragen, z. B.
+  // { src: "/images/profilbild.jpg", alt: "Porträt von Elhan Salaji", width: 320, height: 320 }
+  photo: null,
 };
 
 /** Kurzer Text für den Abschnitt "Über mich", ein Eintrag pro Absatz. */
