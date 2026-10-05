@@ -7,6 +7,9 @@ export const siteMetadata = {
     "Elhan Salaji studiert Medieninformatik an der Hochschule der Medien Stuttgart. Projekte, Lebenslauf und Kontakt.",
 };
 
+/** true zeigt in der Kopfzeile neben dem Namen den roten Hinweis "WIP". */
+export const workInProgress = true;
+
 export const profile: Profile = {
   name: "Elhan Salaji",
   role: "Medieninformatik (B.Sc.) an der Hochschule der Medien Stuttgart",

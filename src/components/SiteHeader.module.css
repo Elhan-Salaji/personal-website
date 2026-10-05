@@ -17,6 +17,25 @@
   overflow-wrap: anywhere;
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Rot aus der Fehlerfarbe, erreicht hell 6.3:1 und dunkel 8:1 */
+.wip {
+  padding: 0 0.3rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  color: var(--error);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  cursor: help;
+}
+
 /* Auf schmalen Bildschirmen lässt sich die Navigation seitlich wischen */
 .navList {
   display: flex;
