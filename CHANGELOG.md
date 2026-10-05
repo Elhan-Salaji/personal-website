@@ -26,6 +26,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - Hero zeigt Name und Studium, Kurzzeile und Foto bleiben ausgeblendet, bis sie in `profile.ts` stehen
 - Kopfzeile läuft nur ab Desktop beim Scrollen mit
 - Fehlende Inhalte sind als `TODO` in `src/content/` markiert statt als sichtbarer Platzhalter
+- Impressum und Datenschutzerklärung ausformuliert, passend zu Hosting, Kalender-Cookie und Rate Limiting
+- Kalender-Link in der Fußzeile sieht aus wie Impressum und Datenschutz
 
 ### Removed
 

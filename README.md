@@ -57,12 +57,12 @@ Fehlt `CALENDAR_PASSWORD` oder ist `SESSION_SECRET` kürzer als 32 Zeichen, blei
 
 Wenn du `CALENDAR_PASSWORD` änderst, werden alle bestehenden Sitzungen ungültig. Deine Freunde müssen sich dann mit dem neuen Passwort anmelden.
 
-## Platzhalter austauschen
+## Inhalte und offene Stellen
 
-Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Fehlende Angaben stehen dort als `TODO`-Kommentar, die Seite blendet sie aus. Die juristischen Absätze in Impressum und Datenschutz stehen noch als `[PLATZHALTER: ...]` im Text. Beides findest du so:
+Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Fehlende Angaben stehen dort als `TODO`-Kommentar, die Seite blendet sie aus. So findest du alle offenen Stellen:
 
 ```bash
-grep -rnE "TODO|PLATZHALTER" src
+grep -rn "TODO" src/content
 ```
 
 | Datei                       | Inhalt                                                    |
@@ -77,6 +77,8 @@ grep -rnE "TODO|PLATZHALTER" src
 Solange `photo` in `profile.ts` auf `null` steht, zeigt der Hero kein Foto. Willst du eins zeigen, legst du es unter `public/images/` ab und trägst Pfad, Größe und Beschreibung in `profile.ts` ein.
 
 Der PDF-Download des Lebenslaufs ist ausgeblendet, solange `cvPdfPath` in `cv.ts` auf `null` steht. Willst du ihn anbieten, legst du eine PDF unter `public/dokumente/` ab und trägst den Pfad dort ein. Die PDF ist dann für alle abrufbar, sie darf also weder Wohnadresse noch Telefonnummer enthalten.
+
+Impressum und Datenschutzerklärung in `legal.ts` beschreiben, was die Seite technisch tut: Hosting bei Vercel, das Cookie der Kalenderseite und die Fehlversuche pro IP-Adresse. Änderst du daran etwas oder bindest einen neuen Dienst ein, passt du die Texte mit an.
 
 Für die Texte gelten diese Regeln: Deutsch, sachlich, keine Gedankenstriche, keine Ausrufezeichen, keine Emojis. Adresse, Telefonnummer und Geburtsdatum gehören nicht auf die öffentliche Seite, die einzige Ausnahme ist das Impressum.
 
