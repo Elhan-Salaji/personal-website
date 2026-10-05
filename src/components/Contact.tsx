@@ -7,16 +7,20 @@ export function Contact() {
   return (
     <Section id={sections.contact.id} title={sections.contact.label}>
       <p>{contactIntro}</p>
-      <ul className={styles.list}>
-        {contactLinks.map((link) => (
-          <li key={link.label}>
-            <span className={styles.label}>{link.label}</span>
-            <a href={link.href} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}>
-              {link.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <address className={styles.address}>
+        <dl className="facts">
+          {contactLinks.map((link) => (
+            <div key={link.label}>
+              <dt>{link.label}</dt>
+              <dd>
+                <a href={link.href} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+                  {link.text}
+                </a>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </address>
     </Section>
   );
 }
