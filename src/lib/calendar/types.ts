@@ -8,8 +8,26 @@ export type CalendarSourceId = "private" | "uni";
  */
 export type CalendarDetailLevel = "busy" | "full";
 
+/** Ein einzelner eingebundener Kalender, z. B. "Arbeit" aus iCloud. */
+export interface CalendarInfo {
+  /** Stabil innerhalb einer Anfrage, z. B. "private-2" */
+  id: string;
+  source: CalendarSourceId;
+  name: string;
+  /** "#rrggbb" aus der ICS-Datei, null für die Standardfarbe der Quelle */
+  color: string | null;
+}
+
+/** Angaben aus dem Kopf einer ICS-Datei. */
+export interface CalendarMeta {
+  name: string | null;
+  color: string | null;
+}
+
 export interface CalendarEvent {
   source: CalendarSourceId;
+  /** Verweist auf CalendarInfo.id */
+  calendarId: string;
   /** Beginn in Europe/Berlin */
   start: DateTime;
   /** Ende in Europe/Berlin, exklusiv */

@@ -8,7 +8,7 @@ const monday = DateTime.fromISO("2026-10-05", { zone: CALENDAR_ZONE });
 const at = (iso: string) => DateTime.fromISO(iso, { zone: CALENDAR_ZONE });
 
 function timed(start: string, end: string): CalendarEvent {
-  return { source: "private", start: at(start), end: at(end), allDay: false };
+  return { source: "private", calendarId: "private-1", start: at(start), end: at(end), allDay: false };
 }
 
 describe("buildWeekDays", () => {
@@ -38,7 +38,7 @@ describe("buildWeekDays", () => {
   });
 
   it("zeigt mehrtägige Ganztagstermine an jedem Tag, aber nicht am exklusiven Endtag", () => {
-    const trip: CalendarEvent = { source: "private", start: at("2026-10-09"), end: at("2026-10-11"), allDay: true };
+    const trip: CalendarEvent = { source: "private", calendarId: "private-1", start: at("2026-10-09"), end: at("2026-10-11"), allDay: true };
     const days = buildWeekDays([trip], monday);
     expect(days.map((d) => d.allDay.length)).toEqual([0, 0, 0, 0, 1, 1, 0]);
   });

@@ -3,7 +3,8 @@ import type { DateTime } from "luxon";
 import { getCalendarSources, getDetailLevel } from "./config";
 import { expandCalendar } from "./expand";
 import { TtlCache } from "./ttl-cache";
-import type { CalendarDetailLevel, CalendarEvent, SourceProblem } from "./types";
+import { describeCalendar } from "./labels";
+import type { CalendarDetailLevel, CalendarEvent, CalendarInfo, SourceProblem } from "./types";
 import { weekRange } from "./week";
 
 /** ICS-Dateien bleiben 12 Minuten im Speicher der Instanz. */
@@ -15,6 +16,8 @@ const icsCache = new TtlCache<string>(ICS_CACHE_TTL_MS);
 
 export interface CalendarWeekData {
   events: CalendarEvent[];
+  /** Alle erfolgreich geladenen Kalender in der Reihenfolge der Umgebungsvariablen */
+  calendars: CalendarInfo[];
   detail: CalendarDetailLevel;
   /** Quellen, bei denen mindestens ein Kalender fehlt */
   sourceProblems: SourceProblem[];
@@ -55,7 +58,14 @@ export async function loadCalendarWeek(weekStart: DateTime): Promise<CalendarWee
         source.urls.map(async (url, index) => {
           try {
             const ics = await icsCache.getOrLoad(url, () => downloadIcs(url));
-            return expandCalendar(ics, source.id, range, detail);
+            const position = index + 1;
+            const { meta, events } = expandCalendar(
+              ics,
+              { source: source.id, calendarId: `${source.id}-${position}` },
+              range,
+              detail,
+            );
+            return { info: describeCalendar(source.id, position, source.urls.length, meta), events };
           } catch (error) {
             const reason = error instanceof Error ? error.message : "unbekannter Fehler";
             console.error(
@@ -65,21 +75,22 @@ export async function loadCalendarWeek(weekStart: DateTime): Promise<CalendarWee
           }
         }),
       );
-      const loaded = perCalendar.filter((events) => events !== null);
+      const loaded = perCalendar.filter((calendar) => calendar !== null);
       const problem: SourceProblem = {
         id: source.id,
         label: source.label,
         failed: perCalendar.length - loaded.length + source.invalidCount,
         total: source.urls.length + source.invalidCount,
       };
-      return { events: loaded.flat(), problem };
+      return { calendars: loaded, problem };
     }),
   );
 
   return {
     detail,
+    calendars: results.flatMap((result) => result.calendars.map((calendar) => calendar.info)),
     events: results
-      .flatMap((result) => result.events)
+      .flatMap((result) => result.calendars.flatMap((calendar) => calendar.events))
       .sort((a, b) => a.start.toMillis() - b.start.toMillis()),
     sourceProblems: results
       .map((result) => result.problem)
