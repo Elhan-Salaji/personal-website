@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { CalendarMonth } from "@/components/calendar/CalendarMonth";
 import { CalendarWeek } from "@/components/calendar/CalendarWeek";
 import { LoginForm } from "@/components/calendar/LoginForm";
 import { getAuthConfig } from "@/lib/auth/config";
 import { hasValidSession } from "@/lib/auth/current-session";
-import { loadCalendarWeek } from "@/lib/calendar/service";
-import { resolveWeekStart } from "@/lib/calendar/week";
+import { monthRange, resolveMonthStart } from "@/lib/calendar/month";
+import { loadCalendar } from "@/lib/calendar/service";
+import { resolveView } from "@/lib/calendar/view";
+import { resolveWeekStart, weekRange } from "@/lib/calendar/week";
 import styles from "./page.module.css";
 
 // Jede Anfrage wird einzeln auf dem Server gerendert, nie vorab oder aus einem
@@ -31,13 +34,30 @@ export default async function CalendarPage({ searchParams }: PageProps<"/kalende
     );
   }
 
-  const { woche } = await searchParams;
-  const weekStart = resolveWeekStart(typeof woche === "string" ? woche : undefined);
-  const data = await loadCalendarWeek(weekStart);
+  const { woche, monat, ansicht } = await searchParams;
+  const view = resolveView(singleParam(ansicht));
+
+  if (view === "monat") {
+    const monthStart = resolveMonthStart(singleParam(monat));
+    const data = await loadCalendar(monthRange(monthStart));
+    return (
+      <div className={`container ${styles.page}`}>
+        <CalendarMonth monthStart={monthStart} data={data} />
+      </div>
+    );
+  }
+
+  const weekStart = resolveWeekStart(singleParam(woche));
+  const data = await loadCalendar(weekRange(weekStart));
 
   return (
     <div className={`container ${styles.page}`}>
-      <CalendarWeek weekStart={weekStart} data={data} />
+      <CalendarWeek weekStart={weekStart} data={data} view={view} />
     </div>
   );
+}
+
+/** Steht ein Parameter mehrfach in der URL, liefert Next.js ein Array. Dann zählt keiner. */
+function singleParam(value: string | string[] | undefined): string | undefined {
+  return typeof value === "string" ? value : undefined;
 }

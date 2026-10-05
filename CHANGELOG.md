@@ -16,6 +16,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - Echte Inhalte aus dem Lebenslauf, Zeitleiste mit Gruppe "Engagement und Auszeichnungen"
 - ADR 0004 zur Schrift
 - Roter Hinweis "WIP" in der Kopfzeile, abschaltbar über `workInProgress` in `profile.ts`
+- Kalender: Woche in sieben Spalten und Monatsansicht, auf dem Handy umschaltbar zwischen Liste, Woche und Monat
 
 ### Changed
 

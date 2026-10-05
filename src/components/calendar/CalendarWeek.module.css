@@ -11,11 +11,12 @@
   font-size: clamp(1.3rem, 4vw, 1.75rem);
 }
 
-.weekNav {
+/* Blättern nach Woche oder Monat */
+.periodNav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-block: 1.25rem 1rem;
+  margin-block: 1rem;
 }
 
 .legend {

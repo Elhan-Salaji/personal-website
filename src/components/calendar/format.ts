@@ -17,9 +17,28 @@ export function describeTime(event: CalendarEvent, day: DateTime): string {
   return event.end.equals(event.start) ? `${from} Uhr` : `${from} bis ${to} Uhr`;
 }
 
+/**
+ * Kurze Zeitangabe für die Kästchen der Spalten- und Monatsansicht: der
+ * Beginn, bei einem Termin vom Vortag das Ende ("bis 10:00"). Leer bei
+ * ganztägigen Terminen und solchen, die den ganzen Tag füllen.
+ */
+export function chipTime(event: CalendarEvent, day: DateTime): string {
+  if (event.allDay) {
+    return "";
+  }
+  if (event.start >= day) {
+    return formatTime(event.start);
+  }
+  return event.end < day.plus({ days: 1 }) ? `bis ${formatTime(event.end)}` : "";
+}
+
 /** Bei Detailstufe busy gibt es keinen Titel, dann steht dort "Belegt". */
 export function eventLabel(event: CalendarEvent): string {
   return event.title ?? "Belegt";
+}
+
+export function toCalendarLookup(calendars: CalendarInfo[]): CalendarLookup {
+  return new Map(calendars.map((calendar) => [calendar.id, calendar]));
 }
 
 /** Name des Kalenders, aus dem der Termin stammt, z. B. "Arbeit". */

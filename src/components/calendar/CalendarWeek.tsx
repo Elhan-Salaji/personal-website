@@ -1,85 +1,73 @@
-import Link from "next/link";
 import { DateTime } from "luxon";
-import { logout } from "@/app/kalender/actions";
 import { buildWeekDays, visibleHourRange, type CalendarDay } from "@/lib/calendar/layout";
-import type { CalendarWeekData } from "@/lib/calendar/service";
+import type { CalendarData } from "@/lib/calendar/service";
 import { CALENDAR_ZONE } from "@/lib/calendar/time";
+import { formatMonthParam, monthOfWeek } from "@/lib/calendar/month";
+import { calendarHref, type CalendarView } from "@/lib/calendar/view";
 import { formatWeekParam } from "@/lib/calendar/week";
+import { CalendarFrame } from "./CalendarFrame";
+import { DayGrid } from "./DayGrid";
 import {
   calendarName,
   colorVars,
-  describeSourceProblems,
   describeTime,
   eventLabel,
   formatTime,
+  toCalendarLookup,
   type CalendarLookup,
 } from "./format";
+import { ViewSwitch } from "./ViewSwitch";
 import styles from "./CalendarWeek.module.css";
 
 interface CalendarWeekProps {
   weekStart: DateTime;
-  data: CalendarWeekData;
+  data: CalendarData;
+  /** Liste oder Spalten auf schmalen Bildschirmen, breit immer das Stundenraster */
+  view: Exclude<CalendarView, "monat">;
 }
 
-export function CalendarWeek({ weekStart, data }: CalendarWeekProps) {
+export function CalendarWeek({ weekStart, data, view }: CalendarWeekProps) {
   const start = weekStart.setLocale("de");
   const end = start.plus({ days: 6 });
   const today = DateTime.now().setZone(CALENDAR_ZONE).toISODate();
   const days = buildWeekDays(data.events, start);
   const isCurrentWeek = days.some((day) => day.date.toISODate() === today);
-  const calendars: CalendarLookup = new Map(data.calendars.map((calendar) => [calendar.id, calendar]));
+  const calendars = toCalendarLookup(data.calendars);
 
   const weekTitle = `KW ${start.weekNumber}: ${start.toFormat("d. MMMM")} bis ${end.toFormat("d. MMMM yyyy")}`;
+  const navigation = [
+    { label: "Vorherige Woche", href: calendarHref(view, formatWeekParam(start.minus({ weeks: 1 }))) },
+    ...(isCurrentWeek ? [] : [{ label: "Aktuelle Woche", href: calendarHref(view) }]),
+    { label: "Nächste Woche", href: calendarHref(view, formatWeekParam(start.plus({ weeks: 1 }))) },
+  ];
 
   return (
-    <>
-      <div className={styles.toolbar}>
-        <h1 className={styles.title}>{weekTitle}</h1>
-        <form action={logout}>
-          <button type="submit" className="button button--secondary">
-            Abmelden
-          </button>
-        </form>
-      </div>
-
-      <nav aria-label="Woche wechseln" className={styles.weekNav}>
-        <Link href={`/kalender?woche=${formatWeekParam(start.minus({ weeks: 1 }))}`} className="button button--secondary">
-          Vorherige Woche
-        </Link>
-        {!isCurrentWeek && (
-          <Link href="/kalender" className="button button--secondary">
-            Aktuelle Woche
-          </Link>
-        )}
-        <Link href={`/kalender?woche=${formatWeekParam(start.plus({ weeks: 1 }))}`} className="button button--secondary">
-          Nächste Woche
-        </Link>
-      </nav>
-
-      {data.calendars.length > 0 && (
-        <ul className={styles.legend} aria-label="Legende">
-          {data.calendars.map((calendar) => (
-            <li
-              key={calendar.id}
-              className={styles.legendItem}
-              data-source={calendar.source}
-              style={colorVars(calendar) as React.CSSProperties}
-            >
-              {calendar.name}
-            </li>
-          ))}
-        </ul>
+    <CalendarFrame
+      title={weekTitle}
+      viewSwitch={
+        <ViewSwitch
+          current={view}
+          weekParam={formatWeekParam(start)}
+          monthParam={formatMonthParam(monthOfWeek(start))}
+        />
+      }
+      navigationLabel="Woche wechseln"
+      navigation={navigation}
+      data={data}
+    >
+      {view === "woche" ? (
+        <DayGrid
+          weeks={[days]}
+          today={today}
+          calendars={calendars}
+          emptyText="Keine Termine in dieser Woche."
+          narrowOnly
+        />
+      ) : (
+        <WeekList days={days} today={today} calendars={calendars} />
       )}
-
-      {data.sourceProblems.length > 0 && (
-        <p role="status" className={styles.warning}>
-          {describeSourceProblems(data.sourceProblems)}
-        </p>
-      )}
-
-      <WeekList days={days} today={today} calendars={calendars} />
       <WeekGrid days={days} today={today} calendars={calendars} />
-    </>
+    </CalendarFrame>
   );
 }
 
