@@ -90,6 +90,8 @@ h3 {
   line-height: 1.2;
   letter-spacing: -0.01em;
   text-wrap: balance;
+  /* Notbremse für einzelne lange Wörter auf schmalen Bildschirmen */
+  overflow-wrap: break-word;
 }
 
 h1 {
