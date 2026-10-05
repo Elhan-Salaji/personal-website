@@ -8,7 +8,7 @@ Die Seite läuft auf Vercel im Hobby-Plan und deployt aus GitHub. Der öffentlic
 
 ## Entscheidung
 
-Wir nutzen Next.js 16 mit App Router und TypeScript. Die öffentlichen Seiten rendert Next.js beim Build statisch. Die Kalenderseite rendert pro Anfrage auf dem Server (`dynamic = "force-dynamic"`), Login und Logout laufen als Server Actions. Fürs Styling reichen CSS Modules und globale CSS-Variablen, Schriften kommen vom System.
+Wir nutzen Next.js 16 mit App Router und TypeScript. Die öffentlichen Seiten rendert Next.js beim Build statisch. Die Kalenderseite rendert pro Anfrage auf dem Server (`dynamic = "force-dynamic"`), Login und Logout laufen als Server Actions. Fürs Styling reichen CSS Modules und globale CSS-Variablen, Schriften kommen vom System (abgelöst durch ADR 0004).
 
 ## Konsequenzen
 
