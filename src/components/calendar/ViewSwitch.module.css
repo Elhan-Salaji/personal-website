@@ -39,8 +39,16 @@
   font-weight: 500;
 }
 
+.wide {
+  display: none;
+}
+
 @media (min-width: 60rem) {
   .narrow {
     display: none;
+  }
+
+  .wide {
+    display: block;
   }
 }

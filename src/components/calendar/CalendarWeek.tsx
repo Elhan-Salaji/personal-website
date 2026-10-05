@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { buildWeekDays, visibleHourRange, type CalendarDay } from "@/lib/calendar/layout";
 import type { CalendarData } from "@/lib/calendar/service";
 import { CALENDAR_ZONE } from "@/lib/calendar/time";
+import { formatMonthParam, monthOfWeek } from "@/lib/calendar/month";
 import { calendarHref, type CalendarView } from "@/lib/calendar/view";
 import { formatWeekParam } from "@/lib/calendar/week";
 import { CalendarFrame } from "./CalendarFrame";
@@ -43,7 +44,13 @@ export function CalendarWeek({ weekStart, data, view }: CalendarWeekProps) {
   return (
     <CalendarFrame
       title={weekTitle}
-      viewSwitch={<ViewSwitch current={view} weekParam={formatWeekParam(start)} />}
+      viewSwitch={
+        <ViewSwitch
+          current={view}
+          weekParam={formatWeekParam(start)}
+          monthParam={formatMonthParam(monthOfWeek(start))}
+        />
+      }
       navigationLabel="Woche wechseln"
       navigation={navigation}
       data={data}

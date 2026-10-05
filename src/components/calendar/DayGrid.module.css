@@ -105,8 +105,11 @@
     display: none;
   }
 
+  /* Wochentage und Tageszahlen stehen links, die Kästchen nutzen die volle Breite */
   .weekdays {
+    padding-left: 0.5rem;
     font-size: 0.8125rem;
+    text-align: left;
   }
 
   .day {

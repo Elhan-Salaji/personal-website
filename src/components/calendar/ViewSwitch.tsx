@@ -6,20 +6,47 @@ interface ViewSwitchProps {
   current: CalendarView;
   /** Woche, die nach dem Umschalten erscheint, z. B. "2026-W41" */
   weekParam: string;
+  /** Monat, der nach dem Umschalten erscheint, z. B. "2026-10" */
+  monthParam: string;
+}
+
+interface SwitchOption {
+  label: string;
+  href: string;
+  active: boolean;
 }
 
 /**
- * Umschalter zwischen Liste und Woche in Spalten. Beides gibt es nur auf
- * schmalen Bildschirmen, ab 60rem zeigt die Woche immer das Stundenraster.
+ * Umschalter zwischen den Ansichten. Auf schmalen Bildschirmen gibt es Liste,
+ * Woche in Spalten und Monat. Ab 60rem zeigt die Woche immer das
+ * Stundenraster, dort bleiben Woche und Monat.
  */
-export function ViewSwitch({ current, weekParam }: ViewSwitchProps) {
-  const options = [
-    { label: "Liste", href: calendarHref("liste", weekParam), active: current === "liste" },
-    { label: "Woche", href: calendarHref("woche", weekParam), active: current === "woche" },
-  ];
+export function ViewSwitch({ current, weekParam, monthParam }: ViewSwitchProps) {
+  const isMonth = current === "monat";
+  const month: SwitchOption = { label: "Monat", href: calendarHref("monat", monthParam), active: isMonth };
 
   return (
-    <nav aria-label="Ansicht" className={styles.narrow}>
+    <>
+      <SwitchNav
+        className={styles.narrow}
+        options={[
+          { label: "Liste", href: calendarHref("liste", weekParam), active: current === "liste" },
+          { label: "Woche", href: calendarHref("woche", weekParam), active: current === "woche" },
+          month,
+        ]}
+      />
+      <SwitchNav
+        className={styles.wide}
+        options={[{ label: "Woche", href: calendarHref("liste", weekParam), active: !isMonth }, month]}
+      />
+    </>
+  );
+}
+
+/** Nur eine der beiden Varianten ist sichtbar, die andere fehlt auch für Screenreader. */
+function SwitchNav({ className, options }: { className: string; options: SwitchOption[] }) {
+  return (
+    <nav aria-label="Ansicht" className={className}>
       <ul className={styles.options}>
         {options.map((option) => (
           <li key={option.label}>

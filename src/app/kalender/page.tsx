@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { CalendarMonth } from "@/components/calendar/CalendarMonth";
 import { CalendarWeek } from "@/components/calendar/CalendarWeek";
 import { LoginForm } from "@/components/calendar/LoginForm";
 import { getAuthConfig } from "@/lib/auth/config";
 import { hasValidSession } from "@/lib/auth/current-session";
+import { monthRange, resolveMonthStart } from "@/lib/calendar/month";
 import { loadCalendar } from "@/lib/calendar/service";
 import { resolveView } from "@/lib/calendar/view";
 import { resolveWeekStart, weekRange } from "@/lib/calendar/week";
@@ -32,9 +34,19 @@ export default async function CalendarPage({ searchParams }: PageProps<"/kalende
     );
   }
 
-  const { woche, ansicht } = await searchParams;
-  // Die Monatsansicht folgt, bis dahin zeigt "monat" die Liste.
-  const view = resolveView(singleParam(ansicht)) === "woche" ? "woche" : "liste";
+  const { woche, monat, ansicht } = await searchParams;
+  const view = resolveView(singleParam(ansicht));
+
+  if (view === "monat") {
+    const monthStart = resolveMonthStart(singleParam(monat));
+    const data = await loadCalendar(monthRange(monthStart));
+    return (
+      <div className={`container ${styles.page}`}>
+        <CalendarMonth monthStart={monthStart} data={data} />
+      </div>
+    );
+  }
+
   const weekStart = resolveWeekStart(singleParam(woche));
   const data = await loadCalendar(weekRange(weekStart));
 
