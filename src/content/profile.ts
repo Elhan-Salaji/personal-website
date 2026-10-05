@@ -9,15 +9,12 @@ export const siteMetadata = {
 
 export const profile: Profile = {
   name: "Elhan Salaji",
+  role: "Medieninformatik (B.Sc.) an der Hochschule der Medien Stuttgart",
   tagline:
-    "Ich studiere Medieninformatik an der Hochschule der Medien Stuttgart. Mein Schwerpunkt: Backend, Server-Betrieb und deren Absicherung.",
-  photo: {
-    // Eigenes Foto in public/images/ ablegen und hier den Pfad anpassen.
-    src: "/images/profilbild-platzhalter.svg",
-    alt: "[PLATZHALTER: Beschreibung des Fotos, z. B. Porträt von Elhan Salaji]",
-    width: 320,
-    height: 320,
-  },
+    "Ich entwickle Backends mit Java und Spring Boot und betreibe sie mit Docker. Dabei achte ich darauf, dass der Code lesbar bleibt und sich ändern lässt.",
+  // TODO: Foto unter public/images/ ablegen und hier eintragen, z. B.
+  // { src: "/images/profilbild.jpg", alt: "Porträt von Elhan Salaji", width: 320, height: 320 }
+  photo: null,
 };
 
 /** Kurzer Text für den Abschnitt "Über mich", ein Eintrag pro Absatz. */

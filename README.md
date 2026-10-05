@@ -59,22 +59,22 @@ Wenn du `CALENDAR_PASSWORD` änderst, werden alle bestehenden Sitzungen ungülti
 
 ## Platzhalter austauschen
 
-Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Jeder Platzhalter beginnt mit `[PLATZHALTER:`, so findest du alle offenen Stellen:
+Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür nicht anfassen. Fehlende Angaben stehen dort als `TODO`-Kommentar, die Seite blendet sie aus. Die juristischen Absätze in Impressum und Datenschutz stehen noch als `[PLATZHALTER: ...]` im Text. Beides findest du so:
 
 ```bash
-grep -rn "PLATZHALTER" src public
+grep -rnE "TODO|PLATZHALTER" src
 ```
 
 | Datei                       | Inhalt                                                    |
 | --------------------------- | --------------------------------------------------------- |
-| `src/content/profile.ts`    | Name, Kurzzeile, Foto, Text "Über mich", Seitentitel      |
+| `src/content/profile.ts`    | Name, Studium, Kurzzeile, Foto, Über mich, Seitentitel    |
 | `src/content/projects.ts`   | Projektkarten mit Technologien und GitHub-Link            |
 | `src/content/cv.ts`         | Lebenslauf-Einträge und Pfad zur PDF                      |
 | `src/content/skills.ts`     | Skill-Gruppen                                             |
 | `src/content/contact.ts`    | E-Mail, LinkedIn, GitHub                                  |
 | `src/content/legal.ts`      | Impressum und Datenschutzerklärung                        |
 
-Dein Foto legst du unter `public/images/` ab und trägst den Pfad in `profile.ts` ein. Danach kannst du `profilbild-platzhalter.svg` löschen.
+Solange `photo` in `profile.ts` auf `null` steht, zeigt der Hero kein Foto. Willst du eins zeigen, legst du es unter `public/images/` ab und trägst Pfad, Größe und Beschreibung in `profile.ts` ein.
 
 Der PDF-Download des Lebenslaufs ist ausgeblendet, solange `cvPdfPath` in `cv.ts` auf `null` steht. Willst du ihn anbieten, legst du eine PDF unter `public/dokumente/` ab und trägst den Pfad dort ein. Die PDF ist dann für alle abrufbar, sie darf also weder Wohnadresse noch Telefonnummer enthalten.
 

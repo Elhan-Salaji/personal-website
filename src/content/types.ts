@@ -6,14 +6,19 @@
 
 export interface Profile {
   name: string;
+  /** Studium und Hochschule, steht im Hero direkt unter dem Namen */
+  role: string;
   tagline: string;
-  photo: {
-    /** Pfad relativ zu /public, z. B. "/images/profilbild.jpg" */
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
+  /** null blendet das Foto aus */
+  photo: Photo | null;
+}
+
+export interface Photo {
+  /** Pfad relativ zu /public, z. B. "/images/profilbild.jpg" */
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 }
 
 export interface Project {
