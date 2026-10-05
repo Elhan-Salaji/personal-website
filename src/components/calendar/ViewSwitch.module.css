@@ -1,0 +1,46 @@
+/* Zusammenhängende Schaltflächen, die aktive Ansicht ist gefüllt */
+.options {
+  display: inline-flex;
+  margin-top: 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  list-style: none;
+}
+
+.options li + li {
+  border-left: 1px solid var(--border-strong);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  color: var(--text);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.options li:first-child .option {
+  border-radius: calc(var(--radius) - 1px) 0 0 calc(var(--radius) - 1px);
+}
+
+.options li:last-child .option {
+  border-radius: 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0;
+}
+
+.option:hover {
+  background: var(--surface);
+}
+
+.option[aria-current="page"] {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+@media (min-width: 60rem) {
+  .narrow {
+    display: none;
+  }
+}
