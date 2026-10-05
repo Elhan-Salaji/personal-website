@@ -45,7 +45,7 @@ describe("parseIcsUrlList", () => {
   });
 
   it("merkt sich die Position ungültiger Einträge und behält die gültigen", () => {
-    expect(parseIcsUrlList("https://a.example/1,kaputt,ftp://a.example/3")).toEqual({
+    expect(parseIcsUrlList("https://a.example/1 kaputt\nftp://a.example/3")).toEqual({
       urls: ["https://a.example/1"],
       invalidPositions: [2, 3],
     });
@@ -53,5 +53,23 @@ describe("parseIcsUrlList", () => {
 
   it.each([undefined, "", " , ,\n"])("liefert für leere Werte eine leere Liste: %j", (raw) => {
     expect(parseIcsUrlList(raw)).toEqual({ urls: [], invalidPositions: [] });
+  });
+
+  it("hängt Text nach einem Komma an den Link davor, wenn kein neuer Link folgt", () => {
+    expect(parseIcsUrlList("https://a.example/1,kaputt").urls).toEqual(["https://a.example/1,kaputt"]);
+  });
+
+  it("lässt Kommas innerhalb eines Links stehen, z. B. beim StarPlan-Export der HdM", () => {
+    const hdm = "https://splan.hdm-stuttgart.de/splan/ical?lan=de&puid=46&type=config&lc=,p0b,c,Qz,Nc,ui,Xb&oex=false";
+    expect(parseIcsUrlList(hdm)).toEqual({ urls: [hdm], invalidPositions: [] });
+  });
+
+  it("trennt einen Link mit Kommas korrekt von weiteren Links", () => {
+    const hdm = "https://splan.hdm-stuttgart.de/splan/ical?lc=,p0b,c&oex=false";
+    expect(parseIcsUrlList(`webcal://a.example/1,${hdm}, webcal://a.example/2`).urls).toEqual([
+      "https://a.example/1",
+      hdm,
+      "https://a.example/2",
+    ]);
   });
 });
