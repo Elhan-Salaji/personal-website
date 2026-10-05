@@ -23,7 +23,7 @@ export interface Project {
   githubUrl: string;
 }
 
-export type CvCategory = "Ausbildung" | "Berufserfahrung" | "Bildung";
+export type CvCategory = "Ausbildung" | "Berufserfahrung" | "Bildung" | "Engagement und Auszeichnungen";
 
 export interface CvEntry {
   category: CvCategory;
