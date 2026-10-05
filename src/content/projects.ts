@@ -2,24 +2,30 @@ import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
-    title: "[PLATZHALTER: Projekt 1]",
+    title: "OccuPi",
     description:
-      "[PLATZHALTER: Ein bis zwei Sätze, was das Projekt macht und welches Problem es löst.]",
-    technologies: ["[PLATZHALTER: Java]", "[PLATZHALTER: Spring Boot]", "[PLATZHALTER: Docker]"],
-    githubUrl: "https://github.com/PLATZHALTER/projekt-1",
+      "Anonyme Belegungserkennung für Seminarräume, Semesterprojekt im 4. Semester. Mein Anteil: Server-Setup, Betrieb mit Docker und Absicherung mit SSL und Keycloak/LDAP.",
+    technologies: ["Raspberry Pi", "Spring Boot", "InfluxDB", "Grafana", "Docker", "Keycloak"],
+    githubUrl: "https://github.com/Elhan-Salaji/OccuPi",
   },
   {
-    title: "[PLATZHALTER: Projekt 2]",
+    title: "Media Tracker",
     description:
-      "[PLATZHALTER: Ein bis zwei Sätze, was das Projekt macht und welches Problem es löst.]",
-    technologies: ["[PLATZHALTER: Python]", "[PLATZHALTER: Netzwerk]"],
-    githubUrl: "https://github.com/PLATZHALTER/projekt-2",
+      "Webanwendung zum Verwalten und Teilen von Medienlisten, Semesterprojekt im 3. Semester im Fünferteam. Mein Anteil: Backend-Struktur, Suchfunktion, MongoDB-Anbindung, Docker und CI/CD.",
+    technologies: ["Spring Boot", "MongoDB", "TypeScript", "React", "Docker"],
+    githubUrl: "https://github.com/Elhan-Salaji/Media-Tracker",
   },
   {
-    title: "[PLATZHALTER: Projekt 3]",
+    title: "Website S.L. Baggerarbeiten",
     description:
-      "[PLATZHALTER: Ein bis zwei Sätze, was das Projekt macht und welches Problem es löst.]",
-    technologies: ["[PLATZHALTER: TypeScript]", "[PLATZHALTER: PostgreSQL]"],
-    githubUrl: "https://github.com/PLATZHALTER/projekt-3",
+      "Konzeption, Umsetzung und laufender Betrieb der Website für einen lokalen Handwerksbetrieb, seit Juli 2026.",
+    technologies: ["TypeScript", "React", "Vercel"],
+    githubUrl: "https://github.com/Elhan-Salaji/s-l-baggerarbeiten",
+  },
+  {
+    title: "Ticketsystem",
+    description: "Kleines Ticketsystem für Support-Anfragen, eigenes Lernprojekt seit September 2026.",
+    technologies: ["Java", "Spring Boot"],
+    githubUrl: "https://github.com/Elhan-Salaji/ticket-system",
   },
 ];

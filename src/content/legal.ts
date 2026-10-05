@@ -12,15 +12,11 @@ export const imprint: LegalPage = {
   sections: [
     {
       heading: "Angaben gemäß § 5 DDG",
-      paragraphs: [
-        "[PLATZHALTER: Vor- und Nachname]",
-        "[PLATZHALTER: Ladungsfähige Anschrift, Straße und Hausnummer]",
-        "[PLATZHALTER: Postleitzahl und Ort]",
-      ],
+      paragraphs: ["Elhan Salaji", "Am Mühlkanal 26", "70190 Stuttgart"],
     },
     {
       heading: "Kontakt",
-      paragraphs: ["E-Mail: [PLATZHALTER: name@example.com]"],
+      paragraphs: ["E-Mail: elhan.salaji2001@gmail.com"],
     },
     {
       heading: "Haftung für Links",
@@ -37,9 +33,9 @@ export const privacyPolicy: LegalPage = {
     {
       heading: "Verantwortliche Person",
       paragraphs: [
-        "[PLATZHALTER: Vor- und Nachname]",
-        "[PLATZHALTER: Anschrift wie im Impressum]",
-        "E-Mail: [PLATZHALTER: name@example.com]",
+        "Elhan Salaji",
+        "Am Mühlkanal 26, 70190 Stuttgart",
+        "E-Mail: elhan.salaji2001@gmail.com",
       ],
     },
     {

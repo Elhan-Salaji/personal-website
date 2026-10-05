@@ -2,19 +2,23 @@ import type { SkillGroup } from "./types";
 
 export const skillGroups: SkillGroup[] = [
   {
-    area: "Netzwerk und Security",
-    skills: ["[PLATZHALTER: TCP/IP]", "[PLATZHALTER: Firewalls]", "[PLATZHALTER: Wireshark]"],
+    area: "Backend",
+    skills: ["Java", "Spring Boot", "Python"],
   },
   {
-    area: "Backend",
-    skills: ["[PLATZHALTER: Java]", "[PLATZHALTER: Spring Boot]", "[PLATZHALTER: REST-APIs]"],
+    area: "Infrastruktur und Security",
+    skills: ["Docker", "CI/CD-Pipelines", "Nginx (Reverse Proxy)", "Let's Encrypt/SSL", "Keycloak"],
   },
   {
     area: "Datenbanken",
-    skills: ["[PLATZHALTER: PostgreSQL]", "[PLATZHALTER: MySQL]"],
+    skills: ["PostgreSQL", "InfluxDB", "MongoDB"],
   },
   {
     area: "Tools",
-    skills: ["[PLATZHALTER: Git]", "[PLATZHALTER: Docker]", "[PLATZHALTER: Linux]"],
+    skills: ["Git und GitHub", "Grafana", "Hetzner", "Vercel"],
+  },
+  {
+    area: "Sprachen",
+    skills: ["Deutsch und Bosnisch (zweisprachig)", "Englisch (B2)"],
   },
 ];
