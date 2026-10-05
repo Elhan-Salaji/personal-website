@@ -1,0 +1,55 @@
+.groups {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 64rem) {
+  .groups {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.timeline {
+  list-style: none;
+  border-left: 2px solid var(--border);
+  padding-left: 1.25rem;
+}
+
+.entry {
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+
+/* Punkt auf der Zeitleiste */
+.entry::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.25rem - 6px);
+  top: 0.45rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.entry p {
+  margin: 0;
+}
+
+.period {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.title {
+  font-weight: 600;
+}
+
+.organization {
+  color: var(--text-muted);
+}
+
+.description {
+  margin-top: 0.25rem !important;
+}

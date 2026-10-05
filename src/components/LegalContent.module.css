@@ -1,0 +1,15 @@
+.article {
+  padding-block: 2.5rem 4rem;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.section h2 {
+  font-size: 1.25rem;
+}
+
+.section p {
+  margin-bottom: 0.5rem;
+}
