@@ -199,10 +199,8 @@ img {
 /* Farben für Fehlermeldungen und Kalenderquellen */
 :root {
   --error: #b42318;
-  --cal-private-bg: #fff1e6;
-  --cal-private-border: #c2410c;
-  --cal-uni-bg: #e3f4f1;
-  --cal-uni-border: #0f766e;
+  --cal-private: #c2410c;
+  --cal-uni: #0f766e;
   --warning-bg: #fff8db;
   --warning-border: #a16207;
 }
@@ -210,25 +208,33 @@ img {
 @media (prefers-color-scheme: dark) {
   :root {
     --error: #ff8a80;
-    --cal-private-bg: #3a2416;
-    --cal-private-border: #fb923c;
-    --cal-uni-bg: #10302c;
-    --cal-uni-border: #2dd4bf;
+    --cal-private: #fb923c;
+    --cal-uni: #2dd4bf;
     --warning-bg: #332a0d;
     --warning-border: #facc15;
   }
 }
 
-/* Quellen unterscheiden sich nicht nur über die Farbe, sondern auch über die
-   Rahmenart: Privat durchgezogen, Hochschule gestrichelt. */
+/*
+ * Jeder Termin bekommt eine Grundfarbe (--event-color): die Apple-Farbe des
+ * Kalenders, sonst die Standardfarbe der Quelle. Daraus entstehen Rahmen und
+ * Hintergrund. Der Rahmen wird zur Textfarbe hin gemischt, damit auch helle
+ * oder graue Farben auf beiden Hintergründen sichtbar bleiben. Der Hintergrund
+ * bleibt so blass, dass der Text darauf gut lesbar ist.
+ * Die Hochschule hat zusätzlich einen gestrichelten Rahmen, damit sie sich
+ * nicht nur über die Farbe unterscheidet.
+ */
+[data-source] {
+  --event-border: color-mix(in srgb, var(--event-color) 60%, var(--text));
+  --event-bg: color-mix(in srgb, var(--event-color) 16%, var(--bg));
+}
+
 [data-source="private"] {
-  --event-bg: var(--cal-private-bg);
-  --event-border: var(--cal-private-border);
+  --event-color: var(--cal-private);
   --event-border-style: solid;
 }
 
 [data-source="uni"] {
-  --event-bg: var(--cal-uni-bg);
-  --event-border: var(--cal-uni-border);
+  --event-color: var(--cal-uni);
   --event-border-style: dashed;
 }

@@ -1,37 +1,27 @@
 import "server-only";
-import { normalizeIcsUrl } from "./source-url";
+import { SOURCE_LABELS } from "./labels";
+import { parseIcsUrlList } from "./source-url";
 import type { CalendarDetailLevel, CalendarSourceId } from "./types";
 
 export interface CalendarSource {
   id: CalendarSourceId;
   label: string;
-  /** null, wenn die Umgebungsvariable fehlt oder ungültig ist */
-  url: string | null;
+  /** Gültige Links, eine Quelle kann aus mehreren Kalendern bestehen */
+  urls: string[];
+  /** Zahl der Einträge, die kein gültiger Link sind */
+  invalidCount: number;
 }
 
-export const SOURCE_LABELS: Record<CalendarSourceId, string> = {
-  private: "Privat",
-  uni: "Hochschule",
-};
-
-function readUrl(name: string): string | null {
-  const raw = process.env[name];
-  if (!raw) {
-    return null;
+function readSource(id: CalendarSourceId, variable: string): CalendarSource {
+  const { urls, invalidPositions } = parseIcsUrlList(process.env[variable]);
+  for (const position of invalidPositions) {
+    console.error(`[kalender] ${variable}: Eintrag ${position} ist kein gültiger Link`);
   }
-  try {
-    return normalizeIcsUrl(raw);
-  } catch {
-    console.error(`[kalender] ${name} enthält keinen gültigen Link`);
-    return null;
-  }
+  return { id, label: SOURCE_LABELS[id], urls, invalidCount: invalidPositions.length };
 }
 
 export function getCalendarSources(): CalendarSource[] {
-  return [
-    { id: "private", label: SOURCE_LABELS.private, url: readUrl("CALENDAR_PRIVATE_ICS_URL") },
-    { id: "uni", label: SOURCE_LABELS.uni, url: readUrl("CALENDAR_UNI_ICS_URL") },
-  ];
+  return [readSource("private", "CALENDAR_PRIVATE_ICS_URL"), readSource("uni", "CALENDAR_UNI_ICS_URL")];
 }
 
 /** Ohne gültigen Wert gilt "busy", damit im Zweifel keine Details sichtbar werden. */

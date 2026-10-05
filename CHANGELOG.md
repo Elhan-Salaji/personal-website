@@ -11,6 +11,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - Passwortgeschützter Kalender mit Wochenansicht, zwei ICS-Quellen und Detailstufe `busy` oder `full`
 - Unit-Tests für Sitzung, Rate Limiting, ICS-Auswertung, Wochenlogik und Cache
 - GitHub Action für Lint, Tests und Build
+- Mehrere Kalender pro Quelle, kommagetrennt in einer Umgebungsvariable, mit Hinweis bei Teilausfall
+- Private Kalender erscheinen mit Namen und Farbe aus iCloud
 
 ### Security
 

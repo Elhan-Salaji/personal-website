@@ -33,8 +33,8 @@ Die öffentliche Seite läuft ohne Variablen. Der Kalender braucht alle fünf. L
 | -------------------------- | ---------------------------------------------------------------------- |
 | `CALENDAR_PASSWORD`        | Passwort für die Kalenderseite                                         |
 | `SESSION_SECRET`           | Zufälliger Schlüssel für das Sitzungs-Cookie, mindestens 32 Zeichen    |
-| `CALENDAR_PRIVATE_ICS_URL` | Freigabe-Link des Apple-Kalenders, `webcal://` darf stehen bleiben     |
-| `CALENDAR_UNI_ICS_URL`     | ICS-Link des Stundenplans der Hochschule                               |
+| `CALENDAR_PRIVATE_ICS_URL` | Freigabe-Links der Apple-Kalender, mehrere durch Komma getrennt        |
+| `CALENDAR_UNI_ICS_URL`     | ICS-Link des Stundenplans der Hochschule, mehrere ebenfalls per Komma  |
 | `CALENDAR_DETAIL`          | `busy` zeigt nur belegte Zeiten, `full` zusätzlich Titel und Ort       |
 
 Ein sicheres Secret erzeugst du im Terminal:
@@ -42,6 +42,14 @@ Ein sicheres Secret erzeugst du im Terminal:
 ```bash
 openssl rand -base64 32
 ```
+
+Mehrere Kalender pro Quelle schreibst du hintereinander in dieselbe Variable, getrennt durch Komma. `webcal://` darf stehen bleiben:
+
+```
+webcal://p01-caldav.icloud.com/published/2/AAA,webcal://p01-caldav.icloud.com/published/2/BBB
+```
+
+Private Kalender übernehmen Namen und Farbe aus iCloud, so wie du sie auf Mac, iPhone und iPad siehst. Änderst du dort die Farbe, zieht die Seite nach spätestens rund 12 Minuten nach. Fehlt die Angabe in der Datei, nutzt die Seite "Privat 1", "Privat 2" usw. und eine Standardfarbe. Die Hochschule hat immer ihre eigene Farbe und einen gestrichelten Rahmen. Die Kalendernamen stehen in der Legende, auch bei `CALENDAR_DETAIL=busy`. Fällt ein Kalender aus, zeigt die Seite die übrigen und nennt im Hinweis, wie viele fehlen. Im Vercel-Log steht dann die Position, etwa `Kalender 3 von 5`, damit du den kaputten Link findest.
 
 Fehlt `CALENDAR_PASSWORD` oder ist `SESSION_SECRET` kürzer als 32 Zeichen, bleibt der Kalender gesperrt. Fehlt `CALENDAR_DETAIL` oder steht dort etwas anderes als `full`, gilt `busy`.
 
@@ -72,7 +80,7 @@ Für die Texte gelten diese Regeln: Deutsch, keine Gedankenstriche, keine Adress
 
 Die Kalenderseite prüft das Sitzungs-Cookie auf dem Server. Ohne gültige Sitzung rendert sie nur das Passwortfeld und ruft die Kalenderquellen gar nicht erst ab. Nach dem Login setzt der Server ein signiertes, `httpOnly`-Cookie, das 7 Tage gilt und nur unter `/kalender` mitgeschickt wird.
 
-Der Server lädt beide ICS-Dateien, löst Wiederholungen samt Ausnahmen auf und rechnet alle Zeiten nach Europe/Berlin um. Die Dateien bleiben 12 Minuten im Speicher. Bei `busy` liest der Code Titel und Ort gar nicht erst aus, sie können also auch nicht im Browser landen. Fällt eine Quelle aus, zeigt die Seite die andere und blendet einen Hinweis ein.
+Der Server lädt alle ICS-Dateien parallel, löst Wiederholungen samt Ausnahmen auf und rechnet alle Zeiten nach Europe/Berlin um. Die Dateien bleiben 12 Minuten im Speicher. Bei `busy` liest der Code Titel und Ort gar nicht erst aus, sie können also auch nicht im Browser landen. Fällt ein Kalender aus, zeigt die Seite die übrigen und blendet einen Hinweis ein.
 
 ### Grenzen ohne externe Datenbank
 

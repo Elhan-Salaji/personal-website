@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { DateTime } from "luxon";
 import { logout } from "@/app/kalender/actions";
-import { SOURCE_LABELS } from "@/lib/calendar/config";
 import { buildWeekDays, visibleHourRange, type CalendarDay } from "@/lib/calendar/layout";
 import type { CalendarWeekData } from "@/lib/calendar/service";
 import { CALENDAR_ZONE } from "@/lib/calendar/time";
 import { formatWeekParam } from "@/lib/calendar/week";
-import { describeTime, eventLabel, formatTime, sourceLabel } from "./format";
+import {
+  calendarName,
+  colorVars,
+  describeSourceProblems,
+  describeTime,
+  eventLabel,
+  formatTime,
+  type CalendarLookup,
+} from "./format";
 import styles from "./CalendarWeek.module.css";
 
 interface CalendarWeekProps {
@@ -20,6 +27,7 @@ export function CalendarWeek({ weekStart, data }: CalendarWeekProps) {
   const today = DateTime.now().setZone(CALENDAR_ZONE).toISODate();
   const days = buildWeekDays(data.events, start);
   const isCurrentWeek = days.some((day) => day.date.toISODate() === today);
+  const calendars: CalendarLookup = new Map(data.calendars.map((calendar) => [calendar.id, calendar]));
 
   const weekTitle = `KW ${start.weekNumber}: ${start.toFormat("d. MMMM")} bis ${end.toFormat("d. MMMM yyyy")}`;
 
@@ -48,31 +56,41 @@ export function CalendarWeek({ weekStart, data }: CalendarWeekProps) {
         </Link>
       </nav>
 
-      <ul className={styles.legend} aria-label="Legende">
-        <li className={styles.legendItem} data-source="private">
-          {SOURCE_LABELS.private}
-        </li>
-        <li className={styles.legendItem} data-source="uni">
-          {SOURCE_LABELS.uni}
-        </li>
-      </ul>
+      {data.calendars.length > 0 && (
+        <ul className={styles.legend} aria-label="Legende">
+          {data.calendars.map((calendar) => (
+            <li
+              key={calendar.id}
+              className={styles.legendItem}
+              data-source={calendar.source}
+              style={colorVars(calendar) as React.CSSProperties}
+            >
+              {calendar.name}
+            </li>
+          ))}
+        </ul>
+      )}
 
-      {data.unavailableSources.length > 0 && (
+      {data.sourceProblems.length > 0 && (
         <p role="status" className={styles.warning}>
-          {data.unavailableSources.map((source) => source.label).join(" und ")}{" "}
-          {data.unavailableSources.length === 1 ? "ist" : "sind"} gerade nicht erreichbar. Angezeigt
-          werden nur die übrigen Termine.
+          {describeSourceProblems(data.sourceProblems)}
         </p>
       )}
 
-      <WeekList days={days} today={today} />
-      <WeekGrid days={days} today={today} />
+      <WeekList days={days} today={today} calendars={calendars} />
+      <WeekGrid days={days} today={today} calendars={calendars} />
     </>
   );
 }
 
 /** Ansicht für schmale Bildschirme: ein Tag unter dem anderen. */
-function WeekList({ days, today }: { days: CalendarDay[]; today: string | null }) {
+interface WeekViewProps {
+  days: CalendarDay[];
+  today: string | null;
+  calendars: CalendarLookup;
+}
+
+function WeekList({ days, today, calendars }: WeekViewProps) {
   const hasEvents = days.some((day) => day.allDay.length + day.timed.length > 0);
   return (
     <div className={styles.list}>
@@ -91,11 +109,16 @@ function WeekList({ days, today }: { days: CalendarDay[]; today: string | null }
             ) : (
               <ul className={styles.listEvents}>
                 {events.map((event, index) => (
-                  <li key={index} className={styles.listEvent} data-source={event.source}>
+                  <li
+                    key={index}
+                    className={styles.listEvent}
+                    data-source={event.source}
+                    style={colorVars(calendars.get(event.calendarId)) as React.CSSProperties}
+                  >
                     <span className={styles.listTime}>{describeTime(event, day.date)}</span>
                     <span className={styles.listLabel}>{eventLabel(event)}</span>
                     {event.location && <span className={styles.listMeta}>{event.location}</span>}
-                    <span className={styles.listMeta}>{sourceLabel(event)}</span>
+                    <span className={styles.listMeta}>{calendarName(event, calendars)}</span>
                   </li>
                 ))}
               </ul>
@@ -108,7 +131,7 @@ function WeekList({ days, today }: { days: CalendarDay[]; today: string | null }
 }
 
 /** Ansicht für breite Bildschirme: Raster mit Stunden und sieben Spalten. */
-function WeekGrid({ days, today }: { days: CalendarDay[]; today: string | null }) {
+function WeekGrid({ days, today, calendars }: WeekViewProps) {
   const { firstHour, lastHour } = visibleHourRange(days);
   const hours = Array.from({ length: lastHour - firstHour }, (_, i) => firstHour + i);
   const hasAllDay = days.some((day) => day.allDay.length > 0);
@@ -136,7 +159,12 @@ function WeekGrid({ days, today }: { days: CalendarDay[]; today: string | null }
           {days.map((day) => (
             <div key={day.date.toISODate()} className={styles.gridAllDay}>
               {day.allDay.map((event, index) => (
-                <div key={index} className={styles.gridAllDayEvent} data-source={event.source}>
+                <div
+                  key={index}
+                  className={styles.gridAllDayEvent}
+                  data-source={event.source}
+                  style={colorVars(calendars.get(event.calendarId)) as React.CSSProperties}
+                >
                   {eventLabel(event)}
                 </div>
               ))}
@@ -165,12 +193,13 @@ function WeekGrid({ days, today }: { days: CalendarDay[]; today: string | null }
             <ul className={styles.gridEvents}>
               {day.allDay.map((event, index) => (
                 <li key={`ganztags-${index}`} className="visually-hidden">
-                  ganztägig: {eventLabel(event)}, {sourceLabel(event)}
+                  ganztägig: {eventLabel(event)}, {calendarName(event, calendars)}
                 </li>
               ))}
               {day.timed.map((segment, index) => {
                 const visibleEnd = Math.max(segment.endMinute, segment.startMinute + 15);
                 const style = {
+                  ...colorVars(calendars.get(segment.event.calendarId)),
                   "--start": segment.startMinute - firstHour * 60,
                   "--duration": visibleEnd - segment.startMinute,
                   "--lane": segment.lane,
@@ -184,7 +213,7 @@ function WeekGrid({ days, today }: { days: CalendarDay[]; today: string | null }
                     </span>
                     <span className={styles.gridEventLabel}>{eventLabel(segment.event)}</span>
                     {segment.event.location && <span className={styles.gridEventMeta}>{segment.event.location}</span>}
-                    <span className="visually-hidden">, {sourceLabel(segment.event)}</span>
+                    <span className="visually-hidden">, {calendarName(segment.event, calendars)}</span>
                   </li>
                 );
               })}

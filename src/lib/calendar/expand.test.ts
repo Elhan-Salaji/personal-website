@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { describe, expect, it } from "vitest";
 import { expandCalendar } from "./expand";
 import { CALENDAR_ZONE } from "./time";
-import type { TimeRange } from "./types";
+import type { CalendarDetailLevel, CalendarSourceId, TimeRange } from "./types";
 
 const BERLIN_VTIMEZONE = `BEGIN:VTIMEZONE
 TZID:Europe/Berlin
@@ -33,6 +33,10 @@ function week(isoMonday: string): TimeRange {
   return { start, end: start.plus({ weeks: 1 }) };
 }
 
+function expandEvents(ics: string, source: CalendarSourceId, range: TimeRange, detail: CalendarDetailLevel) {
+  return expandCalendar(ics, { source, calendarId: `${source}-1` }, range, detail).events;
+}
+
 const berlinTime = (iso: string) => DateTime.fromISO(iso, { zone: CALENDAR_ZONE }).toISO();
 
 // Wöchentliche Vorlesung montags 10:00 bis 11:30 Berliner Zeit, ab 05.10.2026
@@ -60,8 +64,8 @@ END:VEVENT`;
 
 describe("expandCalendar", () => {
   it("löst wöchentliche Serien auf und hält die Berliner Uhrzeit über die Zeitumstellung", () => {
-    const before = expandCalendar(calendar(weeklyLecture), "uni", week("2026-10-19"), "full");
-    const after = expandCalendar(calendar(weeklyLecture), "uni", week("2026-10-26"), "full");
+    const before = expandEvents(calendar(weeklyLecture), "uni", week("2026-10-19"), "full");
+    const after = expandEvents(calendar(weeklyLecture), "uni", week("2026-10-26"), "full");
 
     expect(before).toHaveLength(1);
     expect(before[0].start.toISO()).toBe(berlinTime("2026-10-19T10:00"));
@@ -74,19 +78,19 @@ describe("expandCalendar", () => {
   });
 
   it("lässt per EXDATE ausgenommene Termine weg", () => {
-    const events = expandCalendar(calendar(weeklyLecture), "uni", week("2026-10-12"), "full");
+    const events = expandEvents(calendar(weeklyLecture), "uni", week("2026-10-12"), "full");
     expect(events).toHaveLength(0);
   });
 
   it("übernimmt verschobene Einzeltermine, auch wenn sie aus der Folgewoche kommen", () => {
     const ics = calendar(weeklyLecture, movedOccurrence);
-    const events = expandCalendar(ics, "uni", week("2026-10-26"), "full");
+    const events = expandEvents(ics, "uni", week("2026-10-26"), "full");
     expect(events.map((e) => [e.start.toISO(), e.title, e.location])).toEqual([
       [berlinTime("2026-10-26T10:00"), "Rechnernetze", "Raum 101"],
       [berlinTime("2026-10-30T14:00"), "Rechnernetze (verlegt)", "Raum 202"],
     ]);
 
-    const nextWeek = expandCalendar(ics, "uni", week("2026-11-02"), "full");
+    const nextWeek = expandEvents(ics, "uni", week("2026-11-02"), "full");
     expect(nextWeek).toHaveLength(0);
   });
 
@@ -102,7 +106,7 @@ describe("expandCalendar", () => {
       "END:VEVENT",
       "END:VCALENDAR",
     ].join("\r\n");
-    const [event] = expandCalendar(ics, "uni", week("2026-10-05"), "full");
+    const [event] = expandEvents(ics, "uni", week("2026-10-05"), "full");
     expect(event.start.toISO()).toBe(berlinTime("2026-10-07T08:15"));
   });
 
@@ -119,7 +123,7 @@ describe("expandCalendar", () => {
       "END:VEVENT",
       "END:VCALENDAR",
     ].join("\r\n");
-    const [event] = expandCalendar(ics, "private", week("2026-10-05"), "full");
+    const [event] = expandEvents(ics, "private", week("2026-10-05"), "full");
     expect(event.start.toISO()).toBe(berlinTime("2026-10-07T12:00"));
   });
 
@@ -130,7 +134,7 @@ DTSTART:20261008T160000Z
 DTEND:20261008T170000Z
 SUMMARY:Call
 END:VEVENT`);
-    const [event] = expandCalendar(ics, "private", week("2026-10-05"), "full");
+    const [event] = expandEvents(ics, "private", week("2026-10-05"), "full");
     expect(event.start.toISO()).toBe(berlinTime("2026-10-08T18:00"));
   });
 
@@ -141,13 +145,13 @@ DTSTART;VALUE=DATE:20261009
 DTEND;VALUE=DATE:20261013
 SUMMARY:Urlaub
 END:VEVENT`);
-    const [event] = expandCalendar(ics, "private", week("2026-10-05"), "full");
+    const [event] = expandEvents(ics, "private", week("2026-10-05"), "full");
     expect(event.allDay).toBe(true);
     expect(event.start.toISODate()).toBe("2026-10-09");
     expect(event.end.toISODate()).toBe("2026-10-13");
 
-    expect(expandCalendar(ics, "private", week("2026-10-12"), "full")).toHaveLength(1);
-    expect(expandCalendar(ics, "private", week("2026-10-19"), "full")).toHaveLength(0);
+    expect(expandEvents(ics, "private", week("2026-10-12"), "full")).toHaveLength(1);
+    expect(expandEvents(ics, "private", week("2026-10-19"), "full")).toHaveLength(0);
   });
 
   it("setzt bei ganztägigen Terminen ohne DTEND einen Tag Dauer", () => {
@@ -156,7 +160,7 @@ UID:tag@test
 DTSTART;VALUE=DATE:20261006
 SUMMARY:Geburtstag
 END:VEVENT`);
-    const [event] = expandCalendar(ics, "private", week("2026-10-05"), "full");
+    const [event] = expandEvents(ics, "private", week("2026-10-05"), "full");
     expect(event.end.toISODate()).toBe("2026-10-07");
   });
 
@@ -168,13 +172,13 @@ DTSTART;TZID=Europe/Berlin:20261019T100000
 DTEND;TZID=Europe/Berlin:20261019T113000
 STATUS:CANCELLED
 END:VEVENT`;
-    const events = expandCalendar(calendar(weeklyLecture, cancelledOccurrence), "uni", week("2026-10-19"), "full");
+    const events = expandEvents(calendar(weeklyLecture, cancelledOccurrence), "uni", week("2026-10-19"), "full");
     expect(events).toHaveLength(0);
   });
 
   it("liest bei Detailstufe busy weder Titel noch Ort aus", () => {
-    const [event] = expandCalendar(calendar(weeklyLecture), "uni", week("2026-10-05"), "busy");
-    expect(Object.keys(event).sort()).toEqual(["allDay", "end", "source", "start"]);
+    const [event] = expandEvents(calendar(weeklyLecture), "uni", week("2026-10-05"), "busy");
+    expect(Object.keys(event).sort()).toEqual(["allDay", "calendarId", "end", "source", "start"]);
     expect(JSON.stringify(event)).not.toContain("Rechnernetze");
     expect(JSON.stringify(event)).not.toContain("Raum");
   });
@@ -186,11 +190,32 @@ DTSTART;TZID=Europe/Berlin:20261006T180000
 DTEND;TZID=Europe/Berlin:20261006T190000
 RRULE:FREQ=DAILY;COUNT=3
 END:VEVENT`;
-    const events = expandCalendar(calendar(limited), "private", week("2026-10-05"), "busy");
+    const events = expandEvents(calendar(limited), "private", week("2026-10-05"), "busy");
     expect(events.map((e) => e.start.toISODate())).toEqual(["2026-10-06", "2026-10-07", "2026-10-08"]);
   });
 
   it("wirft bei kaputten Dateien einen Fehler, den der Aufrufer abfangen kann", () => {
-    expect(() => expandCalendar("<html>Fehler</html>", "uni", week("2026-10-05"), "busy")).toThrow();
+    expect(() => expandEvents("<html>Fehler</html>", "uni", week("2026-10-05"), "busy")).toThrow();
+  });
+
+  it("übernimmt Name und Apple-Farbe aus dem Kopf der Datei und ordnet Termine dem Kalender zu", () => {
+    const ics = calendar(weeklyLecture).replace(
+      "PRODID:-//Test//DE",
+      "PRODID:-//Test//DE\r\nX-WR-CALNAME:Arbeit\r\nX-APPLE-CALENDAR-COLOR:#9EA0A8FF",
+    );
+    const result = expandCalendar(ics, { source: "private", calendarId: "private-3" }, week("2026-10-05"), "busy");
+    expect(result.meta).toEqual({ name: "Arbeit", color: "#9ea0a8" });
+    expect(result.events[0].calendarId).toBe("private-3");
+  });
+
+  it("liefert null, wenn Name oder Farbe fehlen oder ungültig sind", () => {
+    const ics = calendar(weeklyLecture).replace(
+      "PRODID:-//Test//DE",
+      "PRODID:-//Test//DE\r\nX-WR-CALNAME:  \r\nX-APPLE-CALENDAR-COLOR:red",
+    );
+    expect(expandCalendar(ics, { source: "private", calendarId: "private-1" }, week("2026-10-05"), "busy").meta).toEqual({
+      name: null,
+      color: null,
+    });
   });
 });
