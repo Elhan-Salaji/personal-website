@@ -8,7 +8,8 @@ export interface Profile {
   name: string;
   /** Studium und Hochschule, steht im Hero direkt unter dem Namen */
   role: string;
-  tagline: string;
+  /** Ein bis zwei Sätze zum Schwerpunkt, null blendet die Zeile aus */
+  tagline: string | null;
   /** null blendet das Foto aus */
   photo: Photo | null;
 }

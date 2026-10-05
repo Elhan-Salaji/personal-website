@@ -1,12 +1,9 @@
 import Image from "next/image";
-import { emailLink, githubLink } from "@/content/contact";
 import { profile } from "@/content/profile";
-import { ExternalLinkIcon } from "./ExternalLinkIcon";
-import { sections } from "./sections";
 import styles from "./Hero.module.css";
 
 export function Hero() {
-  const { photo } = profile;
+  const { photo, tagline } = profile;
 
   return (
     <section aria-labelledby="hero-titel" className={styles.hero}>
@@ -25,23 +22,7 @@ export function Hero() {
             priority
           />
         )}
-        <div className={styles.body}>
-          <p className={styles.tagline}>{profile.tagline}</p>
-          <ul className={styles.links}>
-            <li>
-              <a href={`#${sections.projects.id}`}>Zu den Projekten</a>
-            </li>
-            <li>
-              <a href={githubLink.href} rel="noopener noreferrer">
-                {githubLink.label}
-                <ExternalLinkIcon />
-              </a>
-            </li>
-            <li>
-              <a href={emailLink.href}>{emailLink.label}</a>
-            </li>
-          </ul>
-        </div>
+        {tagline && <p className={styles.tagline}>{tagline}</p>}
       </div>
     </section>
   );

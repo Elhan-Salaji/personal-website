@@ -10,8 +10,8 @@ export const siteMetadata = {
 export const profile: Profile = {
   name: "Elhan Salaji",
   role: "Medieninformatik (B.Sc.) an der Hochschule der Medien Stuttgart",
-  tagline:
-    "Ich entwickle Backends mit Java und Spring Boot und betreibe sie mit Docker. Dabei achte ich darauf, dass der Code lesbar bleibt und sich ändern lässt.",
+  // TODO: Kurzzeile für den Hero, ein bis zwei Sätze zu deinem Schwerpunkt.
+  tagline: null,
   // TODO: Foto unter public/images/ ablegen und hier eintragen, z. B.
   // { src: "/images/profilbild.jpg", alt: "Porträt von Elhan Salaji", width: 320, height: 320 }
   photo: null,
