@@ -25,6 +25,8 @@
   /* Linke Spalte für Abschnittstitel ab Desktop */
   --label-width: 11rem;
   --column-gap: 3rem;
+  /* Spalte für Zeiträume und Bezeichnungen innerhalb eines Abschnitts */
+  --meta-width: 10rem;
   --header-height: 3.5rem;
 
   /* --font-plex-sans und --font-plex-mono setzt next/font in layout.tsx */

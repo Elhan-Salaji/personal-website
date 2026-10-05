@@ -1,40 +1,16 @@
 .groups {
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
-.groups + :global(.button) {
-  margin-top: 2rem;
+.groupTitle {
+  margin-bottom: 1rem;
 }
 
-/* Zwei Spalten ab Tablet, damit drei oder vier Gruppen gleichmäßig aufgehen */
-@media (min-width: 48rem) {
-  .groups {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.timeline {
+.entries {
+  display: grid;
+  gap: 1.25rem;
   list-style: none;
-  border-left: 2px solid var(--border);
-  padding-left: 1.25rem;
-}
-
-.entry {
-  position: relative;
-  padding-bottom: 1.25rem;
-}
-
-/* Punkt auf der Zeitleiste */
-.entry::before {
-  content: "";
-  position: absolute;
-  left: calc(-1.25rem - 6px);
-  top: 0.45rem;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
 }
 
 .entry p {
@@ -42,12 +18,13 @@
 }
 
 .period {
-  font-size: 0.875rem;
   color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
 }
 
 .title {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .organization {
@@ -56,4 +33,18 @@
 
 .description {
   margin-top: 0.25rem !important;
+}
+
+.download {
+  margin-top: 2.5rem;
+}
+
+/* Zeitraum als eigene Spalte, damit die Titel untereinander fluchten */
+@media (min-width: 40rem) {
+  .entry {
+    display: grid;
+    grid-template-columns: var(--meta-width) minmax(0, 1fr);
+    column-gap: 1.5rem;
+    align-items: baseline;
+  }
 }
