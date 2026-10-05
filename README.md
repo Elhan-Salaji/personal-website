@@ -65,6 +65,8 @@ Alle Texte über dich liegen in `src/content/`. Die Komponenten musst du dafür 
 grep -rn "TODO" src/content
 ```
 
+Solange `workInProgress` in `profile.ts` auf `true` steht, zeigt die Kopfzeile neben deinem Namen ein rotes "WIP". Ist die Seite fertig, setzt du den Wert auf `false`.
+
 | Datei                       | Inhalt                                                    |
 | --------------------------- | --------------------------------------------------------- |
 | `src/content/profile.ts`    | Name, Studium, Kurzzeile, Foto, Über mich, Seitentitel    |
@@ -84,7 +86,7 @@ Für die Texte gelten diese Regeln: Deutsch, sachlich, keine Gedankenstriche, ke
 
 ## Gestaltung
 
-Farben, Abstände und Schriften stehen als Variablen oben in `src/app/globals.css`. Die Seite nutzt Zinc-Töne und Petrol als einzigen Akzent, Linien statt Schatten und Radien von 2 bis 3 px. Text erreicht hell wie dunkel mindestens 6.6:1 Kontrast. Wenn du eine Farbe änderst, prüf den Kontrast neu.
+Farben, Abstände und Schriften stehen als Variablen oben in `src/app/globals.css`. Die Seite nutzt Zinc-Töne und Petrol als einzigen Akzent, Linien statt Schatten und Radien von 2 bis 3 px. Rot taucht nur im WIP-Hinweis und in Fehlermeldungen auf. Text erreicht hell wie dunkel mindestens 6.6:1 Kontrast. Wenn du eine Farbe änderst, prüf den Kontrast neu.
 
 Ab 48rem Breite (768 px) teilt sich die Seite in zwei Spalten. Links stehen Name, Abschnittstitel und Copyright (`--label-width`), rechts Navigation und Inhalt. Fließtext endet nach `--measure`, das sind rund 70 Zeichen. Innerhalb eines Abschnitts haben Zeiträume und Bezeichnungen eine eigene Spalte (`--meta-width`), so fluchten Lebenslauf, Skills und Kontakt untereinander.
 
