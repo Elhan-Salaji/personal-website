@@ -1,6 +1,8 @@
 import type { DateTime } from "luxon";
 import { SOURCE_LABELS } from "@/lib/calendar/labels";
-import type { CalendarEvent, SourceProblem } from "@/lib/calendar/types";
+import type { CalendarEvent, CalendarInfo, SourceProblem } from "@/lib/calendar/types";
+
+export type CalendarLookup = ReadonlyMap<string, CalendarInfo>;
 
 export const formatTime = (time: DateTime) => time.setLocale("de").toFormat("HH:mm");
 
@@ -20,8 +22,18 @@ export function eventLabel(event: CalendarEvent): string {
   return event.title ?? "Belegt";
 }
 
-export function sourceLabel(event: CalendarEvent): string {
-  return SOURCE_LABELS[event.source];
+/** Name des Kalenders, aus dem der Termin stammt, z. B. "Arbeit". */
+export function calendarName(event: CalendarEvent, calendars: CalendarLookup): string {
+  return calendars.get(event.calendarId)?.name ?? SOURCE_LABELS[event.source];
+}
+
+/**
+ * CSS-Variable mit der Farbe des Kalenders. Ohne eigene Farbe greift die
+ * Standardfarbe der Quelle aus globals.css. Die Farbe ist vorher geprüft
+ * (normalizeHexColor), daher landet nur "#rrggbb" im HTML.
+ */
+export function colorVars(calendar: CalendarInfo | undefined): Record<string, string> {
+  return calendar?.color ? { "--event-color": calendar.color } : {};
 }
 
 /** Hinweistext für Quellen, die ganz oder teilweise fehlen. */
