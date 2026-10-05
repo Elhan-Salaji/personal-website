@@ -96,6 +96,8 @@ Für Text und Überschriften nutzt die Seite IBM Plex Sans, für Zeiträume und 
 
 Die Kalenderseite prüft das Sitzungs-Cookie auf dem Server. Ohne gültige Sitzung rendert sie nur das Passwortfeld und ruft die Kalenderquellen gar nicht erst ab. Nach dem Login setzt der Server ein signiertes, `httpOnly`-Cookie, das 7 Tage gilt und nur unter `/kalender` mitgeschickt wird.
 
+Auf dem Handy schaltest du oben zwischen drei Ansichten um: Liste, Woche in sieben Spalten und Monat. Ab 60rem Breite zeigt die Woche das Stundenraster, dort gibt es Woche und Monat. Die Ansicht steht in der URL (`ansicht=woche`, `ansicht=monat`), der Zeitraum ebenso (`woche=2026-W41`, `monat=2026-10`). Ohne Parameter zeigt die Seite die Liste der aktuellen Woche. Ein Cookie für die Ansicht gibt es nicht.
+
 Der Server lädt alle ICS-Dateien parallel, löst Wiederholungen samt Ausnahmen auf und rechnet alle Zeiten nach Europe/Berlin um. Die Dateien bleiben 12 Minuten im Speicher. Bei `busy` liest der Code Titel und Ort gar nicht erst aus, sie können also auch nicht im Browser landen. Fällt ein Kalender aus, zeigt die Seite die übrigen und blendet einen Hinweis ein.
 
 ### Grenzen ohne externe Datenbank
