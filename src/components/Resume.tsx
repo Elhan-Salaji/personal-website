@@ -30,9 +30,11 @@ export function Resume() {
           </div>
         ))}
       </div>
-      <a href={cvPdfPath} className="button" download>
-        Lebenslauf als PDF herunterladen
-      </a>
+      {cvPdfPath && (
+        <a href={cvPdfPath} className="button" download>
+          Lebenslauf als PDF herunterladen
+        </a>
+      )}
     </Section>
   );
 }

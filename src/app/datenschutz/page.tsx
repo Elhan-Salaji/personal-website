@@ -4,6 +4,9 @@ import { LegalContent } from "@/components/LegalContent";
 
 export const metadata: Metadata = {
   title: privacyPolicy.title,
+  // Seite bleibt erreichbar, soll aber nicht in Suchergebnissen auftauchen,
+  // weil sie die Anschrift enthält.
+  robots: { index: false, follow: true },
 };
 
 export default function PrivacyPage() {

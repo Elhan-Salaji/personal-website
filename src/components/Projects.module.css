@@ -10,12 +10,6 @@
   }
 }
 
-@media (min-width: 64rem) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .card {
   display: flex;
   flex-direction: column;
