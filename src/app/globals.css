@@ -232,21 +232,37 @@ img {
   }
 }
 
-/* Tags, z. B. für Technologien und Skills */
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  list-style: none;
+/*
+ * Liste aus Bezeichnung und Wert, z. B. für Skills und Kontakt. Die
+ * Bezeichnung steht ab Tablet in derselben Spalte wie die Zeiträume im
+ * Lebenslauf, damit die Werte untereinander fluchten.
+ */
+.facts {
+  display: grid;
+  gap: 0.875rem;
+  margin: 0;
 }
 
-.tag {
-  padding: 0.05rem 0.4rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
+.facts > div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.facts dt {
   color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
+}
+
+.facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 40rem) {
+  .facts > div {
+    grid-template-columns: var(--meta-width) minmax(0, 1fr);
+    column-gap: 1.5rem;
+    align-items: baseline;
+  }
 }
 
 /* Farben für Fehlermeldungen und Kalenderquellen */
