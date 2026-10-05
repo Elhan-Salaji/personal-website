@@ -14,6 +14,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - Mehrere Kalender pro Quelle, kommagetrennt in einer Umgebungsvariable, mit Hinweis bei Teilausfall
 - Private Kalender erscheinen mit Namen und Farbe aus iCloud
 
+### Fixed
+
+- Links mit Kommas im Query-String (z. B. HdM StarPlan) werden nicht mehr in Teile zerlegt
+
 ### Security
 
 - Sicherheits-Header (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`)

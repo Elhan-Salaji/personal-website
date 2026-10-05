@@ -49,6 +49,8 @@ Mehrere Kalender pro Quelle schreibst du hintereinander in dieselbe Variable, ge
 webcal://p01-caldav.icloud.com/published/2/AAA,webcal://p01-caldav.icloud.com/published/2/BBB
 ```
 
+Ein Komma trennt nur, wenn direkt danach ein neuer Link mit `webcal://` oder `https://` beginnt. Kommas innerhalb eines Links bleiben erhalten, das braucht zum Beispiel der Stundenplan-Export der HdM (`...&lc=,p0b,c&oex=false`). Du kannst die Links auch durch Leerzeichen oder Zeilenumbruch trennen.
+
 Private Kalender übernehmen Namen und Farbe aus iCloud, so wie du sie auf Mac, iPhone und iPad siehst. Änderst du dort die Farbe, zieht die Seite nach spätestens rund 12 Minuten nach. Fehlt die Angabe in der Datei, nutzt die Seite "Privat 1", "Privat 2" usw. und eine Standardfarbe. Die Hochschule hat immer ihre eigene Farbe und einen gestrichelten Rahmen. Die Kalendernamen stehen in der Legende, auch bei `CALENDAR_DETAIL=busy`. Fällt ein Kalender aus, zeigt die Seite die übrigen und nennt im Hinweis, wie viele fehlen. Im Vercel-Log steht dann die Position, etwa `Kalender 3 von 5`, damit du den kaputten Link findest.
 
 Fehlt `CALENDAR_PASSWORD` oder ist `SESSION_SECRET` kürzer als 32 Zeichen, bleibt der Kalender gesperrt. Fehlt `CALENDAR_DETAIL` oder steht dort etwas anderes als `full`, gilt `busy`.
