@@ -74,7 +74,9 @@ grep -rn "PLATZHALTER" src public
 | `src/content/contact.ts`    | E-Mail, LinkedIn, GitHub                                  |
 | `src/content/legal.ts`      | Impressum und Datenschutzerklärung                        |
 
-Dein Foto legst du unter `public/images/` ab und trägst den Pfad in `profile.ts` ein. Den Lebenslauf legst du als PDF unter `public/dokumente/` ab und passt `cvPdfPath` in `cv.ts` an. Danach kannst du die Platzhalter-Dateien löschen.
+Dein Foto legst du unter `public/images/` ab und trägst den Pfad in `profile.ts` ein. Danach kannst du `profilbild-platzhalter.svg` löschen.
+
+Der PDF-Download des Lebenslaufs ist ausgeblendet, solange `cvPdfPath` in `cv.ts` auf `null` steht. Willst du ihn anbieten, legst du eine PDF unter `public/dokumente/` ab und trägst den Pfad dort ein. Die PDF ist dann für alle abrufbar, sie darf also weder Wohnadresse noch Telefonnummer enthalten.
 
 Für die Texte gelten diese Regeln: Deutsch, keine Gedankenstriche, keine Adresse, Telefonnummer oder Geburtsdatum auf der öffentlichen Seite. Die einzige Ausnahme ist das Impressum, falls du eins brauchst.
 
