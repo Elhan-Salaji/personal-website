@@ -1,0 +1,250 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.3rem, 4vw, 1.75rem);
+}
+
+.weekNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 1.25rem 1rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  list-style: none;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legendItem::before {
+  content: "";
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px var(--event-border-style) var(--event-border);
+  border-radius: 3px;
+  background: var(--event-bg);
+}
+
+.warning {
+  max-width: none;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--warning-border);
+  border-radius: var(--radius);
+  background: var(--warning-bg);
+}
+
+/* Liste: Standard auf schmalen Bildschirmen */
+.list {
+  display: block;
+}
+
+.listDay {
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.listDayTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.todayBadge {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 0.75rem;
+}
+
+.free {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.listEvents {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.listEvent {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  border: 2px var(--event-border-style) var(--event-border);
+  border-radius: var(--radius);
+  background: var(--event-bg);
+}
+
+.listTime {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.listLabel {
+  overflow-wrap: anywhere;
+}
+
+.listMeta {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Raster: ab Tablet im Querformat */
+.grid {
+  --hour-height: 3rem;
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .list {
+    display: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 3.5rem repeat(7, minmax(0, 1fr));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+}
+
+.gridCorner,
+.gridHeader,
+.gridAllDayLabel,
+.gridAllDay {
+  border-bottom: 1px solid var(--border);
+}
+
+.gridHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: 0.4rem;
+  border-left: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.gridHeader[data-today] {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.gridHeaderDate {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.gridAllDayLabel {
+  padding: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.gridAllDay {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px;
+  border-left: 1px solid var(--border);
+}
+
+.gridAllDayEvent {
+  padding: 0 0.3rem;
+  border: 2px var(--event-border-style) var(--event-border);
+  border-radius: 4px;
+  background: var(--event-bg);
+  font-size: 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gridHours {
+  display: flex;
+  flex-direction: column;
+}
+
+.gridHour {
+  height: var(--hour-height);
+  padding: 0 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: right;
+  transform: translateY(-0.5em);
+}
+
+.gridHour:first-child {
+  transform: none;
+}
+
+.gridDay {
+  position: relative;
+  height: calc(var(--hours) * var(--hour-height));
+  border-left: 1px solid var(--border);
+  /* Stundenlinien */
+  background-image: linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 100% var(--hour-height);
+}
+
+.gridDay[aria-current="date"] {
+  background-color: var(--surface);
+}
+
+.gridEvents {
+  list-style: none;
+}
+
+.gridEvent {
+  position: absolute;
+  top: calc(var(--start) / 60 * var(--hour-height));
+  height: calc(var(--duration) / 60 * var(--hour-height) - 2px);
+  left: calc(var(--lane) / var(--lanes) * 100% + 2px);
+  width: calc(100% / var(--lanes) - 4px);
+  display: flex;
+  flex-direction: column;
+  padding: 0.1rem 0.3rem;
+  border: 2px var(--event-border-style) var(--event-border);
+  border-radius: 4px;
+  background: var(--event-bg);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  overflow: hidden;
+}
+
+.gridEventTime {
+  font-weight: 600;
+}
+
+.gridEventLabel,
+.gridEventMeta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gridEventMeta {
+  color: var(--text-muted);
+}
