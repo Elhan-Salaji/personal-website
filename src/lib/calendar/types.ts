@@ -25,3 +25,13 @@ export interface TimeRange {
   start: DateTime;
   end: DateTime;
 }
+
+/** Zustand einer Quelle, die nicht vollständig geladen werden konnte. */
+export interface SourceProblem {
+  id: CalendarSourceId;
+  label: string;
+  /** Kalender dieser Quelle, die fehlen */
+  failed: number;
+  /** Alle eingetragenen Kalender dieser Quelle, 0 heißt nicht eingerichtet */
+  total: number;
+}

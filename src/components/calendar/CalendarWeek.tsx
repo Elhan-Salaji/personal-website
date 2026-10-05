@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { DateTime } from "luxon";
 import { logout } from "@/app/kalender/actions";
-import { SOURCE_LABELS } from "@/lib/calendar/config";
+import { SOURCE_LABELS } from "@/lib/calendar/labels";
 import { buildWeekDays, visibleHourRange, type CalendarDay } from "@/lib/calendar/layout";
 import type { CalendarWeekData } from "@/lib/calendar/service";
 import { CALENDAR_ZONE } from "@/lib/calendar/time";
 import { formatWeekParam } from "@/lib/calendar/week";
-import { describeTime, eventLabel, formatTime, sourceLabel } from "./format";
+import { describeSourceProblems, describeTime, eventLabel, formatTime, sourceLabel } from "./format";
 import styles from "./CalendarWeek.module.css";
 
 interface CalendarWeekProps {
@@ -57,11 +57,9 @@ export function CalendarWeek({ weekStart, data }: CalendarWeekProps) {
         </li>
       </ul>
 
-      {data.unavailableSources.length > 0 && (
+      {data.sourceProblems.length > 0 && (
         <p role="status" className={styles.warning}>
-          {data.unavailableSources.map((source) => source.label).join(" und ")}{" "}
-          {data.unavailableSources.length === 1 ? "ist" : "sind"} gerade nicht erreichbar. Angezeigt
-          werden nur die übrigen Termine.
+          {describeSourceProblems(data.sourceProblems)}
         </p>
       )}
 
